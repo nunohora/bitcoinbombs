@@ -4,13 +4,12 @@ var connect = require('connect'),
     express = require('express'),
     io      = require('socket.io'),
     routes  = require('./routes'),
+    db      = require('./db'),
     port    = (process.env.PORT || 8081);
 
 //Connect to Database
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/bitcoinbombs');
+db.initialize();
 
-var db = mongoose.connection;
 //Setup Express
 var server = express.createServer();
 
