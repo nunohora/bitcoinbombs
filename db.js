@@ -1,62 +1,53 @@
-var mongoose    = require('mongoose'),
-    blockchain  = require('./blockchain'),
-    Deferred    = require('promised-io').Deferred;
-    when        = require('promised-io').when;
+var mongoose      = require('mongoose'),
+    connection    = mongoose.connect('mongodb://localhost/bitcoinbombs'),
+    Deferred      = require('promised-io').Deferred,
+    when          = require('promised-io').when,
+    utils         = require('./utils'),
+    blockchain    = require('./blockchain');
 
-blockchain.getAddressBalance('1gSmEzj1FsZ46vJz2XBWRzY9dJa6S7a1X');
-
-//Comnect to database
-mongoose.connect('mongodb://localhost/bitcoinbombs');
+var UserModel     = require('./models/UserModel');
+UserModel.setConnection(connection);
 
 var db = mongoose.connection;
 
 module.exports = {
 
-    UserModel: null,
-
     initialize: function () {
-        var self = this;
-
         console.log('dabatase initialize');
 
         db.on('error', console.error.bind(console, 'connection error:'));
-        db.once('open', function callback () {
-            console.log('connection open');
-            self.defineUserSchema();
-        });
-    },
-
-    defineUserSchema: function () {
-        var userSchema = new mongoose.Schema({
-                unique: {
-                    type: mongoose.Schema.Types.ObjectId,
-                    required: true
-                },
-                btcAddress: {
-                    type: String
-                }
-            });
-
-        this.UserModel = mongoose.model('User', userSchema);
-
-        this.createNewUser();
+        db.once('open', function () { console.log('connection open'); });
     },
 
     createNewUser: function () {
-        var newUser = new this.UserModel(),
-            dfd = new Deferred();
+        var dfd = new Deferred(),
+            pass = utils.generatePassword(),
+            newUser;
 
-        newUser.unique = new mongoose.Types.ObjectId();
+        newUser = new UserModel.getUserModel({
+            password: pass
+        });
+
+        newUser.save();
 
         //creating new wallet address
         //for a new user 
         when(blockchain.getNewAddress()).
         then(function (newAddress) {
             newUser.btcAddress = newAddress;
+            newUser.save();
 
-            dfd.resolve(newUser);
+            dfd.resolve({
+                user: newUser,
+                password: pass
+            });
         });
 
         return dfd.promise;
+    },
+
+    getUser: function (userId, password) {
+        console.log('user: ', userId);
+        console.log('password: ', password);
     }
 };

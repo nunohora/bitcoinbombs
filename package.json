@@ -1,7 +1,7 @@
 {
-  "name": "YOUR-PROJECT-NAME-HERE",
-  "description": "YOUR PROJECT DESCRIPTION HERE",
-  "author": "YOUR NAME <your@emailaddress.com>",
+  "name": "Bitcoin-Bombs",
+  "description": "Bitcoin Kamikaze Clone",
+  "author": "Nuno Hora <your@emailaddress.com>",
   "version": "0.0.1",
   "dependencies": {
     "connect": "1.8.5",
@@ -10,8 +10,11 @@
     "socket.io": "0.8.7",
     "hbs": "2.6.0",
     "blockchain-wallet": "0.0.3",
-    "node-uuid": "1.4.1",
-    "promised-io": "0.3.4"
+    "promised-io": "0.3.4",
+    "underscore": "1.6.0",
+    "password-generator": "0.2.2",
+    "bcrypt": "0.7.7",
+    "mongoose-auto-increment": "3.0.2"
   },
   "devDependencies": {
     "vows": "0.5.x",

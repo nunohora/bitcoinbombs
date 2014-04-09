@@ -2,7 +2,7 @@
 var connect = require('connect'),
     hbs     = require('hbs'),
     express = require('express'),
-    io      = require('socket.io'),
+    io      = require('./io'),
     routes  = require('./routes'),
     db      = require('./db'),
     port    = (process.env.PORT || 8081);
@@ -47,31 +47,21 @@ server.error(function(err, req, res, next){
 server.listen(port);
 
 //Setup Socket.IO
-var io = io.listen(server);
-io.sockets.on('connection', function(socket){
-  console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('server_message',data);
-    socket.emit('server_message',data);
-  });
-  socket.on('disconnect', function(){
-    console.log('Client Disconnected.');
-  });
-});
-
+io.initialize(server);
 
 ///////////////////////////////////////////
 //              Routes                   //
 ///////////////////////////////////////////
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
-server.get('/', routes.index);
+server.get('/', routes.newUser);
+server.get('/:user/:pass', routes.oldUser);
 
 //A Route for Creating a 500 Error (Useful to keep around)
-server.get('/500', routes.fivehundred);
+server.get('/500', routes.servererror);
 
 //The 404 Route (ALWAYS Keep this as the last route)
-server.get('/*', routes.fourohfour);
+server.get('/*', routes.notfound);
 
 function NotFound(msg){
     this.name = 'NotFound';

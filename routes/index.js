@@ -4,13 +4,24 @@ var db   = require('../db'),
 /*
  * GET home page.
  */
-exports.index = function(req, res){
-
+exports.newUser = function(req, res){
     when(db.createNewUser()).
-    then(function (user) {
+    then(function (params) {
         res.render('index', {
             title: "Bitcoin Bombs!" ,
-            address: user.btcAddress
+            address: params.user.btcAddress
         });
+    });
+};
+
+exports.oldUser = function (req, res) {
+    when(db.getUser(req.params['user'], req.params['pass'])).
+    then(function (response) {
+        if (response) {
+
+        }
+        else {
+
+        }
     });
 };
