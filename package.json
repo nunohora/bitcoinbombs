@@ -6,7 +6,7 @@
   "dependencies": {
     "connect": "1.8.5",
     "express": "2.5.2",
-    "mongoose": "2.4.8",
+    "mongoose": "3.8.8",
     "socket.io": "0.8.7",
     "hbs": "2.6.0",
     "blockchain-wallet": "0.0.3",
