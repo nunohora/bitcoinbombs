@@ -30,8 +30,6 @@ module.exports = {
 
         newUser.save();
 
-        console.log(pass);
-
         //creating new wallet address
         //for a new user
         when(blockchain.getNewAddress()).
@@ -39,9 +37,9 @@ module.exports = {
             newUser.btcAddress = newAddress;
             newUser.save();
 
-            console.log(newUser);
             dfd.resolve({
-                user: newUser,
+                userId: newUser.userId,
+                btcAddress: newUser.btcAddress,
                 password: pass
             });
         });

@@ -3,13 +3,16 @@
 
 $(document).ready(function() {
 
-  var socket = io.connect();
+    var socket = io.connect(),
+        data = $('.content').data('user');
 
-  $('#sender').bind('click', function() {
-   socket.emit('message', 'Message Sent on ' + new Date());
-  });
+    console.log(data);
 
-  socket.on('server_message', function(data){
-   $('#receiver').append('<li>' + data + '</li>');
-  });
+    $('#sender').bind('click', function() {
+        socket.emit('message', 'Message Sent on ' + new Date());
+    });
+
+    socket.on('server_message', function(data){
+        $('#receiver').append('<li>' + data + '</li>');
+    });
 });

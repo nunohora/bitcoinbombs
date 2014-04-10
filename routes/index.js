@@ -8,8 +8,8 @@ exports.newUser = function(req, res){
     when(db.createNewUser()).
     then(function (params) {
         res.render('index', {
-            title: "Bitcoin Bombs!" ,
-            address: params.user.btcAddress
+            title: "Bitcoin Bombs!",
+            data: JSON.stringify(params)
         });
     });
 };
