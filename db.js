@@ -34,7 +34,7 @@ module.exports = {
         then(function (newAddress) {
             newUser.btcAddress = newAddress;
             newUser.save(function () {
-                dfd.resolve({ user: newUser, password: pass });
+                dfd.resolve({ user: newUser, password: pass, address: newAddress });
             });
         });
 
