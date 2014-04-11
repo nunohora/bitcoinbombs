@@ -28,19 +28,13 @@ module.exports = {
             password: pass
         });
 
-        newUser.save();
-
-        //creating new wallet address
+        //creating new wallet newAddress
         //for a new user
         when(blockchain.getNewAddress()).
         then(function (newAddress) {
             newUser.btcAddress = newAddress;
-            newUser.save();
-
-            dfd.resolve({
-                userId: newUser.userId,
-                btcAddress: newUser.btcAddress,
-                password: pass
+            newUser.save(function () {
+                dfd.resolve({ user: newUser, password: pass });
             });
         });
 
@@ -48,7 +42,25 @@ module.exports = {
     },
 
     getUser: function (userId, password) {
-        console.log('user: ', userId);
-        console.log('password: ', password);
+        var dfd = new Deferred(),
+            model = UserModel.getUserModel();
+
+        if (userId && password) {
+            model.getAuthenticated(userId, password, function (err, user) {
+                console.log('error: ', err);
+                console.log('error: ', user);
+                if (!err) {
+                    dfd.resolve(user);
+                }
+                else {
+                    dfd.resolve(false);
+                }
+            });
+        }
+        else {
+            return dfd.promise(false);
+        }
+
+        return dfd.promise;
     }
 };

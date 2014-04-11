@@ -6,7 +6,9 @@ $(document).ready(function() {
     var socket = io.connect(),
         data = $('.content').data('user');
 
-    console.log(data);
+    if (data) {
+        window.history.pushState('bla', 'bla', location.href + data.url);
+    }
 
     $('#sender').bind('click', function() {
         socket.emit('message', 'Message Sent on ' + new Date());
