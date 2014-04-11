@@ -47,40 +47,25 @@ module.exports = {
 
         UserSchema.methods.comparePassword = function(candidatePassword, cb) {
             bcrypt.compare(candidatePassword, this.password, function(err, isMatch) {
-                if (err) {
-                    console.log('errporrrr: ', err);
-                    return cb(err);
-                }
-
+                if (err) return cb(err);
                 cb(null, isMatch);
             });
         };
 
         UserSchema.statics.getAuthenticated = function(userId, password, cb) {
             this.findOne({ userId: userId }, function(err, user) {
-                console.log('user: ', user);
-                if (err) {
-                    console.log('error1: ', err);
-                    return cb(err);
-                }
+                if (err) return cb(err);
 
                 // make sure the user exists
-                if (!user) {
-                    console.log('error2: ', 'no user');
-                    return cb(true, null);
-                }
+                if (!user) return cb(true, null);
 
                 // test for a matching password
                 user.comparePassword(password, function(err, isMatch) {
-                    if (err) {
-                        console.log('error3: ', err);
-                        return cb(err);
-                    }
+                    if (err) return cb(err);
 
                     // check if the password was a match
-                    if (isMatch) {
-                        return cb(false, user);
-                    }
+                    if (isMatch) return cb(false, user);
+                    else return cb('no match');
                 });
             });
         };

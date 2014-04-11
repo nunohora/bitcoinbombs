@@ -20,8 +20,6 @@ exports.newUser = function(req, res){
 };
 
 exports.oldUser = function (req, res) {
-    console.log('old user: ', req.params['user'], req.params['pass']);
-
     when(db.getUser(req.params['user'], req.params['pass'])).
     then(function (response) {
         console.log('response: ', response);

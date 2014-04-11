@@ -47,14 +47,8 @@ module.exports = {
 
         if (userId && password) {
             model.getAuthenticated(userId, password, function (err, user) {
-                console.log('error: ', err);
-                console.log('error: ', user);
-                if (!err) {
-                    dfd.resolve(user);
-                }
-                else {
-                    dfd.resolve(false);
-                }
+                if (!err) dfd.resolve(user);
+                else dfd.resolve(false);
             });
         }
         else {
