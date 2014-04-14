@@ -24,23 +24,17 @@ server.configure(function(){
     server.use(server.router);
 });
 
+//Register partials folder
+hbs.registerPartials(__dirname + '/views/partials');
+
 //setup the errors
 server.error(function(err, req, res, next){
     if (err instanceof NotFound) {
-        res.render('404.hbs', { locals: {
-                  title : '404 - Not Found',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX'
-                },status: 404 });
+      console.log('not found');
+      routes.notfound;
     } else {
-        res.render('500.hbs', { locals: {
-                  title : 'The Server Encountered an Error',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX',
-                  error: err
-                },status: 500 });
+      console.log('server error');
+      routes.servererror;
     }
 });
 
