@@ -13,7 +13,7 @@ exports.newUser = function(req, res){
         });
 
         res.render('index', {
-            title: "Bitcoin Bombs!",
+            title: "Bitcoin Kamikaze",
             data: JSON.stringify({ url: urlPath }),
             address: params.user.btcAddress
         });
@@ -27,7 +27,7 @@ exports.oldUser = function (req, res) {
 
         if (response) {
             res.render('index', {
-                title: "Bitcoin Bombs!",
+                title: "Bitcoin Kamikaze",
                 data: null,
                 address: response.btcAddress
             });

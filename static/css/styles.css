@@ -1,0 +1,106 @@
+/* CSS BEGIN*/
+body {
+    width: 900px;
+    margin: auto;
+    font-family: Tahoma, Geneva, sans-serif;
+}
+
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+/*Clearfix*/
+.clearfix:before,
+.clearfix:after {
+  content:"";
+  display:table;
+}
+.clearfix:after {
+  clear:both;
+}
+.clearfix {
+  zoom:1; /* For IE 6/7 (trigger hasLayout) */
+}
+
+aside {
+	font-size: 14px;	
+}
+
+.menu {
+	background: #804e2e;
+	border-radius: 5px;
+	display: inline-block;
+	color: white;
+	font-weight: bold;
+}
+
+.menu li {
+	float: left;
+	padding: 5px 10px;
+}
+
+.menu a {
+	color: white;
+	text-decoration: none;
+}
+
+.menu a:hover {
+	color: #888;
+}
+
+.bet-type {
+    list-style: none;
+    color: white;
+}
+
+.bet-type li {
+    border-radius: 5px;
+    text-align: center;
+    float: left;
+    width: 33%;
+    height: 38px;
+    background-color: #804e2e;
+}
+
+.logo, .bomb, .step, .treasure, .refresh{
+	background: url(../images/sprites.png) no-repeat;
+}
+
+.logo{
+	background-position: -7px 0;
+	width: 340px;
+	height: 109px;
+	display: block;
+	margin: 10px 0;
+}
+
+.bomb{
+	background-position: -6px -119px ;
+	width: 32px;
+	height: 32px;
+}
+
+.step{
+	background-position: -6px -163px ;
+	width: 32px;
+	height: 32px;
+}
+
+.treasure{
+	background-position: -5px -209px ;
+	width: 32px;
+	height: 32px;
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.refresh{
+	background-position: -6px -255px ;
+	width: 16px;
+	height: 16px;
+	display: inline-block;
+	vertical-align: middle;
+}
+

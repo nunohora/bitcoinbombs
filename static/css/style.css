@@ -46,26 +46,3 @@ table {
     border-collapse: collapse;
     border-spacing: 0;
 }
-/* END CSS RESET*/
-
-/* CSS BEGIN*/
-body {
-    width: 900px;
-    margin: auto;
-    font-family: Tahoma, Geneva, sans-serif;
-}
-
-.bet-type {
-    list-style: none;
-    color: white;
-}
-
-.bet-type li {
-    border-radius: 5px;
-    text-align: center;
-    float: left;
-    width: 33%;
-    height: 38px;
-    background-color: #804e2e;
-    border-radius: 5px;
-}
