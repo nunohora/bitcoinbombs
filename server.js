@@ -49,7 +49,7 @@ io.initialize(server);
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
 server.get('/', routes.newUser);
-server.get('/:user/:pass', routes.oldUser);
+server.get('/user/:user/:pass', routes.oldUser);
 
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', routes.servererror);
