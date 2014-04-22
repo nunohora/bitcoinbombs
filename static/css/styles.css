@@ -13,17 +13,25 @@ p {
 	padding-bottom: 15px;
 	line-height: 17px;
 }
-aside,
-article {
+.upper-part {
+	height: 690px;
+	border-bottom: 3px solid #804e2e;
+}
+.aside,
+.game {
 	float: left;
-	width: 46.5%;
+	width: 40%;
 }
 aside {
 	padding-right: 20px;
 }
-article {
+.game {
 	padding: 0 20px;
 	font-size: 11px;
+	line-height: 38px;
+}
+li {
+	float: left;
 }
 /*Clearfix*/
 .clearfix:before,
@@ -43,9 +51,15 @@ article {
 h2 {
 	font-weight: bold;
 	margin-bottom: 12px;
+	font-size: 14px;
+}
+h2,
+.info,
+.game-data {
+	color: #666;
 }
 aside,
-h2 {
+footer {
 	font-size: 14px;	
 }
 aside .link {
@@ -78,9 +92,6 @@ header {
 .menu a:hover {
 	color: #888;
 }
-.info {
-	color: #666;
-}
 .info-box {
 	margin-bottom: 20px;
 	border: solid 1px #804e2e;
@@ -99,15 +110,84 @@ header {
     list-style: none;
     margin: 0 auto;
     display: table;
-    color: white;
+    border-bottom: 3px solid #804e2e;
+}
+.game {
+	border: 1px solid #666;
+	padding: 0 60px;
+	color: white;
+	font-size: 11px;
+	line-height: 38px;
+	text-align: center;
+}
+.bet-type li,
+.step-row li {
+	cursor: pointer;
+}
+.tile {
+	border-radius: 5px;
+	background-color: #804e2e;
+	height: 38px;
 }
 .bet-type li {
-    border-radius: 5px;
-    text-align: center;
-    float: left;
-    width: 133px;
-    height: 38px;
-    background-color: #804e2e;
+    width: 108px;
+    height: 34px;
+    margin: 0 5px 10px 0;
+}
+.step-row {
+	width: 100%;
+	margin-bottom: 5px;
+}
+.step-tile {
+	background-color: #f8a879;
+	border-radius: 5px;
+	margin-right: 5px;
+	height: 40px;
+	width: 40px;
+}
+.take-reward {
+	border-radius: 10px;
+	width: 100px;
+	height: 40px;
+}
+footer {
+	text-align: center;
+	margin-top: 20px;
+}
+footer h2 {
+	margin: 30px 0 15px;
+}
+footer .game-data {
+	font-size: 12px;
+	font-weight: bold;
+	margin-top: 5px;
+}
+footer .hash {
+	color: #eb6120;
+	margin-left: 5px;
+}
+footer table {
+	margin: auto;
+	width: 498px;
+	border: 1px solid #666;
+}
+footer table th {
+	font-weight: bold;
+}
+footer table tr {
+	height: 19px;
+}
+footer table td,
+footer table th {
+	padding: 3px;
+}
+footer table td:first-child,
+footer table th:first-child {
+    text-align:left;
+}
+footer table td:last-child,
+footer table th:last-child {
+    text-align:right;
 }
 .logo, .bomb, .step, .treasure, .refresh{
 	background: url(../images/sprites.png) no-repeat;

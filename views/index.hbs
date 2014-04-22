@@ -12,9 +12,11 @@
     <link rel="stylesheet" href="/css/styles.css">
   </head>
   <body data-user="{{data}}">
-      {{> aside}}
-      {{> game}}
-      <footer>
+      <div class="upper-part">
+        {{> aside}}
+        {{> game}}
+      </div>
+      {{> footer}}
       <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
       <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\\/script>')</script>
       <script defer src="/js/script.js"></script>
@@ -25,19 +27,5 @@
           g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
           s.parentNode.insertBefore(g,s)}(document,'script'));
       </script>
-    </footer>
-    <div>{{address}}</div>
-    <footer>
-      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-      <script>window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\\/script>')</script>
-      <script defer src="/js/script.js"></script>
-      <script defer src="/socket.io/socket.io.js">
-        script
-          var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview'],['_trackPageLoadTime']];
-          (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-          g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-          s.parentNode.insertBefore(g,s)}(document,'script'));
-      </script>
-    </footer>
   </body>
 </html>
