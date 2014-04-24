@@ -14,13 +14,16 @@ p {
 	line-height: 17px;
 }
 .upper-part {
-	height: 690px;
+	height: 660px;
 	border-bottom: 3px solid #804e2e;
 }
 .aside,
 .game {
 	float: left;
-	width: 40%;
+	width: 47%;
+}
+.game li {
+	-webkit-transition-duration: 0.3s;
 }
 aside {
 	padding-right: 20px;
@@ -29,7 +32,7 @@ aside {
 	width: 334px;
 	padding: 0 60px;
 	font-size: 11px;
-	line-height: 38px;
+	line-height: 41px;
 	border: 1px solid #666;
 	color: white;
 	text-align: center;
@@ -64,7 +67,7 @@ h2,
 }
 aside,
 footer {
-	font-size: 14px;	
+	font-size: 14px;
 }
 aside .link {
 	line-height: 20px;
@@ -124,6 +127,7 @@ header {
 	border-radius: 5px;
 	background-color: #804e2e;
 	height: 38px;
+
 }
 .bet-type ul {
 	padding-top: 20px;
@@ -134,6 +138,9 @@ header {
     width: 108px;
     height: 34px;
     margin: 0 4px 8px 0;
+}
+.bet-type li:hover {
+	background: #666;
 }
 .bet-type li:nth-child(3),
 .bet-type li:nth-child(6),
@@ -153,6 +160,9 @@ header {
 	margin-right: 5px;
 	height: 40px;
 	width: 40px;
+}
+.step-tile:hover {
+	background: #f3610b;
 }
 .take-reward {
 	border-radius: 10px;
