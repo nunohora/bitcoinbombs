@@ -1,244 +1,277 @@
-/* CSS BEGIN*/
-body {
-    width: 900px;
-    margin: 20px auto;
-    font-family: Tahoma, Geneva, sans-serif;
+.aside,.game {
+float:left;
+width:47%;
 }
-ul {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-p {
-	padding-bottom: 15px;
-	line-height: 17px;
-}
-.upper-part {
-	height: 660px;
-	border-bottom: 3px solid #804e2e;
-}
-.aside,
-.game {
-	float: left;
-	width: 47%;
-}
-.game li {
-	-webkit-transition-duration: 0.3s;
-}
-aside {
-	padding-right: 20px;
-}
-.game {
-	width: 334px;
-	padding: 0 60px;
-	font-size: 11px;
-	line-height: 41px;
-	border: 1px solid #666;
-	color: white;
-	text-align: center;
-}
-li {
-	float: left;
-}
-/*Clearfix*/
-.clearfix:before,
-.clearfix:after {
-  content:"";
-  display:table;
-}
-.clearfix:after {
-  clear:both;
-}
-.clearfix {
-  zoom:1; /* For IE 6/7 (trigger hasLayout) */
-}
-.bold {
-	font-weight: bold;
-}
-h2 {
-	font-weight: bold;
-	margin-bottom: 12px;
-	font-size: 14px;
-}
-h2,
-.info,
-.game-data {
-	color: #666;
-}
-aside,
-footer {
-	font-size: 14px;
-}
-aside .link {
-	line-height: 20px;
-	color: #eb6120;
-	display: block;
-}
-header {
-	width: 340px;
-	margin-bottom: 20px;
-}
-.inline {
-	display: inline-block;
-}
-.menu {
-	background: #804e2e;
-	border-radius: 5px;
-	display: inline-block;
-	color: white;
-	font-weight: bold;
-}
-.menu li {
-	float: left;
-	padding: 5px 7px;
-}
-.menu a {
-	color: white;
-	text-decoration: none;
-}
-.menu a:hover {
-	color: #888;
-}
-.info-box {
-	margin-bottom: 20px;
-	border: solid 1px #804e2e;
-	border-radius: 5px;
-	padding: 15px 0;
-	text-align: center;
-}
-.info-box span {
-	line-height: 20px;
-	padding: 4px;
-}
-.value {
-	color: #804e2e;
-}
-.bet-type {
-    margin: 0 auto 25px auto;
-    padding-bottom: 3px;
-    display: table;
-    border-bottom: 3px solid #804e2e;
-}
-.bet-type li,
-.step-row li {
-	cursor: pointer;
-}
-.tile {
-	border-radius: 5px;
-	background-color: #804e2e;
-	height: 38px;
 
+.bet-type {
+border-bottom:3px solid #804e2e;
+display:table;
+margin:0 auto 25px;
+padding-bottom:3px;
 }
-.bet-type ul {
-	padding-top: 20px;
-}
+
 .bet-type li {
-    line-height: 33px;
-    display: inline;
-    width: 108px;
-    height: 34px;
-    margin: 0 4px 8px 0;
+display:inline;
+height:34px;
+line-height:33px;
+margin:0 4px 8px 0;
+width:108px;
 }
+
+.bet-type li,.step-row li {
+cursor:pointer;
+}
+
 .bet-type li:hover {
-	background: #666;
+background:#666;
 }
-.bet-type li:nth-child(3),
-.bet-type li:nth-child(6),
-.bet-type li:nth-child(9),
-.bet-type li:nth-child(12) {
-	margin-right: 0px;
-	content: "";
-	display: block;
+
+.bet-type li:nth-child(3),.bet-type li:nth-child(6),.bet-type li:nth-child(9),.bet-type li:nth-child(12) {
+content:"";
+display:block;
+margin-right:0;
 }
+
+.bet-type ul {
+padding-top:20px;
+}
+
+.bold,footer table th {
+font-weight:700;
+}
+
+.bomb {
+background-position:-6px -119px;
+height:32px;
+width:32px;
+}
+
+.clearfix {
+zoom:1;
+}
+
+.clearfix:after {
+clear:both;
+}
+
+.clearfix:before,.clearfix:after {
+content:"";
+display:table;
+}
+
+.game {
+border:1px solid #666;
+color:#FFF;
+font-size:11px;
+line-height:41px;
+padding:0 60px;
+text-align:center;
+width:334px;
+}
+
+.game li {
+-webkit-transition-duration:.3s;
+}
+
+.info-box {
+border:solid 1px #804e2e;
+border-radius:5px;
+margin-bottom:20px;
+padding:15px 0;
+text-align:center;
+}
+
+.info-box span {
+line-height:20px;
+padding:4px;
+}
+
+.inline {
+display:inline-block;
+}
+
+.logo {
+background-position:-7px 0;
+display:block;
+height:109px;
+margin:10px 0;
+}
+
+.logo,.bomb,.step,.treasure,.refresh {
+background:url(../images/sprites.png) no-repeat;
+}
+
+.menu {
+background:#804e2e;
+border-radius:5px;
+color:#FFF;
+display:inline-block;
+font-weight:700;
+}
+
+.menu a {
+color:#FFF;
+text-decoration:none;
+}
+
+.menu a:hover {
+color:#888;
+}
+
+.menu li {
+float:left;
+padding:5px 7px;
+}
+
+.refresh {
+background-position:-6px -255px;
+display:inline-block;
+height:16px;
+vertical-align:middle;
+width:16px;
+}
+
+.step {
+background-position:-6px -163px;
+height:32px;
+width:32px;
+}
+
 .step-row {
-	width: 100%;
-	margin-bottom: 8px;
+margin-bottom:8px;
+width:100%;
 }
+
 .step-tile {
-	background-color: #f8a879;
-	border-radius: 5px;
-	margin-right: 5px;
-	height: 40px;
-	width: 40px;
+background-color:#f8a879;
+border-radius:5px;
+height:40px;
+margin-right:5px;
+width:40px;
 }
+
 .step-tile:hover {
-	background: #f3610b;
+background:#f3610b;
 }
+
 .take-reward {
-	border-radius: 10px;
-	width: 100px;
-	height: 40px;
-	margin-left: 9px;
+border-radius:10px;
+height:40px;
+margin-left:9px;
+width:100px;
 }
+
+.tile {
+background-color:#804e2e;
+border-radius:5px;
+height:38px;
+}
+
+.treasure {
+background-position:-5px -209px;
+display:inline-block;
+height:32px;
+vertical-align:middle;
+width:32px;
+}
+
+.upper-part {
+border-bottom:3px solid #804e2e;
+height:660px;
+}
+
+.value {
+color:#804e2e;
+}
+
+aside {
+padding-right:20px;
+}
+
+aside .link {
+color:#eb6120;
+display:block;
+line-height:20px;
+}
+
+aside,footer {
+font-size:14px;
+}
+
+body {
+font-family:Tahoma, Geneva, sans-serif;
+margin:20px auto;
+width:900px;
+}
+
 footer {
-	text-align: center;
-	margin-top: 20px;
+margin-top:20px;
+text-align:center;
 }
-footer h2 {
-	margin: 30px 0 15px;
-}
+
 footer .game-data {
-	font-size: 12px;
-	font-weight: bold;
-	margin-top: 5px;
+font-size:12px;
+font-weight:700;
+margin-top:5px;
 }
+
 footer .hash {
-	color: #eb6120;
-	margin-left: 5px;
+color:#eb6120;
+margin-left:5px;
 }
+
+footer h2 {
+margin:30px 0 15px;
+}
+
 footer table {
-	margin: auto;
-	width: 498px;
-	border: 1px solid #666;
+border:1px solid #666;
+margin:auto;
+width:498px;
 }
-footer table th {
-	font-weight: bold;
+
+footer table td,footer table th {
+padding:3px;
 }
+
+footer table td:first-child,footer table th:first-child {
+text-align:left;
+}
+
+footer table td:last-child,footer table th:last-child {
+text-align:right;
+}
+
 footer table tr {
-	height: 19px;
+height:19px;
 }
-footer table td,
-footer table th {
-	padding: 3px;
+
+h2 {
+font-size:14px;
+font-weight:700;
+margin-bottom:12px;
 }
-footer table td:first-child,
-footer table th:first-child {
-    text-align:left;
+
+h2,.info,.game-data {
+color:#666;
 }
-footer table td:last-child,
-footer table th:last-child {
-    text-align:right;
+
+header {
+margin-bottom:20px;
+width:340px;
 }
-.logo, .bomb, .step, .treasure, .refresh{
-	background: url(../images/sprites.png) no-repeat;
+
+li {
+float:left;
 }
-.logo{
-	background-position: -7px 0;
-	height: 109px;
-	display: block;
-	margin: 10px 0;
+
+p {
+line-height:17px;
+padding-bottom:15px;
 }
-.bomb{
-	background-position: -6px -119px ;
-	width: 32px;
-	height: 32px;
-}
-.step{
-	background-position: -6px -163px ;
-	width: 32px;
-	height: 32px;
-}
-.treasure{
-	background-position: -5px -209px ;
-	width: 32px;
-	height: 32px;
-	display: inline-block;
-	vertical-align: middle;
-}
-.refresh{
-	background-position: -6px -255px ;
-	width: 16px;
-	height: 16px;
-	display: inline-block;
-	vertical-align: middle;
+
+ul {
+list-style:none;
+margin:0;
+padding:0;
 }
