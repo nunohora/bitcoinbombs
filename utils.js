@@ -7,13 +7,7 @@ module.exports = {
     },
 
     createUrlPath: function (params) {
-        var path = '';
-
-        _.each(params, function (param) {
-            path = path + param + '/';
-        }, this);
-
-        return path;
+        return 'http://' + params.hostname + '/user/' + params.userId + '/' + params.pass;
     },
 
     createGamePath: function () {

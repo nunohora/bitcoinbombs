@@ -10,8 +10,6 @@ var mongoose      = require('mongoose'),
 module.exports = {
 
     initialize: function () {
-        console.log('dabatase initialize');
-
         UserModel.initialize(connection);
 
         db.on('error', console.error.bind(console, 'connection error:'));
@@ -34,6 +32,7 @@ module.exports = {
         then(function (newAddress) {
             newUser.btcAddress = newAddress;
             newUser.save(function () {
+                console.log(newUser);
                 dfd.resolve({ user: newUser, password: pass, address: newAddress });
             });
         });

@@ -22,11 +22,9 @@ module.exports = {
             userId: { type: Number, required: true },
             btcAddress: { type: String, index: { unique: true } },
             password: { type: String, required: true },
-            game: {
-                currentStep: { type: Number, required: true, default: 0 },
-                currentGame: { type: Array, required: true, default: [] },
-                gameState: { type: Boolean, required: true, default: 0 }
-            }
+            currentStep: { type: Number, required: true, default: 0 },
+            gameState: { type: Boolean, required: true, default: 0 },
+            currentGame: Array
         });
 
         UserSchema.pre('save', function(next) {

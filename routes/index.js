@@ -12,7 +12,8 @@ exports.newUser = function(req, res){
     then(function (params) {
         urlPath = utils.createUrlPath({
             userId: params.user.userId,
-            pass: params.password
+            pass: params.password,
+            hostname: req.headers.host
         });
 
         res.render('index', {
