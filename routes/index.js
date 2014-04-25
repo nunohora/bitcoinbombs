@@ -1,7 +1,6 @@
 var db    = require('../db'),
     utils = require('../utils'),
-    when  = require('promised-io').when,
-    title = 'Bitcoin Kamikaze';
+    when  = require('promised-io').when;
 
 exports.newUser = function(req, res){
     var urlPath;
@@ -17,8 +16,11 @@ exports.newUser = function(req, res){
         });
 
         res.render('index', {
-            title: title,
-            data: JSON.stringify({ url: urlPath }),
+            data: {
+                url: urlPath,
+                gameState: false,
+                btcAddress:
+            },
             address: params.user.btcAddress
         });
     });
@@ -29,9 +31,10 @@ exports.oldUser = function (req, res) {
     then(function (response) {
         if (response) {
             res.render('index', {
-                title: title,
-                data: null,
-                address: response.btcAddress
+                data: {
+                    url: null,
+                    btcAddress: response.btcAddress
+                }
             });
         }
         else {
