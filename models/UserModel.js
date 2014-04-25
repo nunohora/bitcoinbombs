@@ -21,7 +21,12 @@ module.exports = {
         UserSchema = new mongoose.Schema({
             userId: { type: Number, required: true },
             btcAddress: { type: String, index: { unique: true } },
-            password: { type: String, required: true }
+            password: { type: String, required: true },
+            game: {
+                currentStep: { type: Number, required: true, default: 0 },
+                currentGame: { type: Array, required: true, default: [] },
+                gameState: { type: Boolean, required: true, default: 0 }
+            }
         });
 
         UserSchema.pre('save', function(next) {
