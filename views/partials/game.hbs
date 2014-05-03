@@ -1,22 +1,22 @@
 <article class="game">
-    <div class="bet-type">
+    <div class="bet-type {{^if data.gameState}}available{{/if}}">
         <ul>
-            <li class="tile">Free play!</li>
-            <li class="tile">Bet 0.001 XBT</li>
-            <li class="tile">Bet 0.005 XBT</li>
-            <li class="tile">Bet 0.01 XBT</li>
-            <li class="tile">Bet 0.025 XBT</li>
-            <li class="tile">Bet 0.05 XBT</li>
-            <li class="tile">Bet 0.1 XBT</li>
-            <li class="tile">Bet 0.2 XBT</li>
-            <li class="tile">Bet 0.4 XBT</li>
-            <li class="tile">Bet 0.0001 XBT</li>
-            <li class="tile">Bet 0.00025 XBT</li>
-            <li class="tile">Bet 0.0005 XBT</li>
+            <li class="bet tile" value="0">Free play!</li>
+            <li class="bet tile" value="0.001">Bet 0.001 XBT</li>
+            <li class="bet tile" value="0.005">Bet 0.005 XBT</li>
+            <li class="bet tile" value="0.01">Bet 0.01 XBT</li>
+            <li class="bet tile" value="0.025">Bet 0.025 XBT</li>
+            <li class="bet tile" value="0.05">Bet 0.05 XBT</li>
+            <li class="bet tile" value="0.1">Bet 0.1 XBT</li>
+            <li class="bet tile" value="0.2">Bet 0.2 XBT</li>
+            <li class="bet tile" value="0.4">Bet 0.4 XBT</li>
+            <li class="bet tile" value="0.001">Bet 0.0001 XBT</li>
+            <li class="bet tile" value="0.00025">Bet 0.00025 XBT</li>
+            <li class="bet tile" value="0.005">Bet 0.0005 XBT</li>
         </ul>
     </div>
     <ul class="game-steps">
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 0 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -26,7 +26,7 @@
                 <li class="take-reward tile">Take bet * 1.2</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 1 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -36,7 +36,7 @@
                 <li class="take-reward tile">Take bet * 1.4</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 2 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -46,7 +46,7 @@
                 <li class="take-reward tile">Take bet * 1.6</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 3 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -56,7 +56,7 @@
                 <li class="take-reward tile">Take bet * 2</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 4 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -66,7 +66,7 @@
                 <li class="take-reward tile">Take bet * 2.5</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 5 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -76,7 +76,7 @@
                 <li class="take-reward tile">Take bet * 3</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 6 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -86,7 +86,7 @@
                 <li class="take-reward tile">Take bet * 4</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 7 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -96,7 +96,7 @@
                 <li class="take-reward tile">Take bet * 5</li>
             </ul>
         </li>
-        <li class="step-row">
+        <li class="step-row {{#ifCond data.currentStep 8 }}available{{/ifCond}}">
             <ul>
                 <li class="step-tile"></li>
                 <li class="step-tile"></li>
@@ -106,6 +106,5 @@
                 <li class="take-reward tile">Take bet * 6</li>
             </ul>
         </li>
-        
     </ul>
 </article>

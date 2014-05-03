@@ -12,27 +12,24 @@ module.exports = {
     initialize: function () {
         UserModel.initialize(connection);
 
+        this.model = UserModel.getUserModel();
+
         db.on('error', console.error.bind(console, 'connection error:'));
         db.once('open', function () { console.log('connection open'); });
     },
 
     createNewUser: function () {
         var dfd = new Deferred(),
-            pass = utils.generatePassword(),
-            model = UserModel.getUserModel(),
-            newUser;
+            pass = utils.generatePassword();
 
-        newUser = new model({
+        var newUser = new this.model({
             password: pass
         });
 
-        //creating new wallet newAddress
-        //for a new user
         when(blockchain.getNewAddress()).
         then(function (newAddress) {
             newUser.btcAddress = newAddress;
             newUser.save(function () {
-                console.log(newUser);
                 dfd.resolve({ user: newUser, password: pass, address: newAddress });
             });
         });
@@ -41,18 +38,73 @@ module.exports = {
     },
 
     getUser: function (userId, password) {
-        var dfd = new Deferred(),
-            model = UserModel.getUserModel();
+        var dfd = new Deferred();
 
-        if (userId && password) {
-            model.getAuthenticated(userId, password, function (err, user) {
-                if (!err) dfd.resolve(user);
-                else dfd.resolve(false);
-            });
-        }
-        else {
-            return dfd.promise(false);
-        }
+        when(this.authenticateUser(userId, password)).
+        then(function (user) {
+            if (user) { dfd.resolve(user); }
+            else { dfd.resolve(false); }
+        });
+
+        return dfd.promise;
+    },
+
+    createNewGame: function (data) {
+        var dfd = new Deferred(),
+            betValue = data.betValue,
+            userData = utils.getUserDataFromUrl(data.url),
+            userId = userData.userId,
+            password = userData.password;
+
+        when(this.authenticateUser(userId, password)).
+        then(function (user) {
+            if (user) {
+                if (!user.gameState) {
+                    user.gameState = 1;
+                    user.currentGame = utils.createGamePath();
+                    user.currentStep = 0;
+                    user.betValue = betValue;
+
+                    user.save(function () {
+                        dfd.resolve({ betValue: betValue, nextStep: 1 });
+                    });
+                }
+                else { dfd.resolve( { error: 'gamestarted' }); }
+            }
+            else { dfd.resolve(false); }
+        });
+
+        return dfd.promise;
+    },
+
+    checkStep: function (data) {
+        var dfd = new Deferred(),
+            stepped = data.stepped,
+            userData = utils.getUserDataFromUrl(data.url),
+            userId = userData.userId,
+            password = userData.password;
+
+        when(this.authenticateUser(userId, password)).
+        then(function (user) {
+            if (user) {
+                
+            }
+            else { dfd.resolve(false); }
+        });
+
+        return dfd.promise;
+    },
+
+    authenticateUser: function (userId, password) {
+        dfd = new Deferred();
+
+        this.model.getAuthenticated(userId, password, function (err, user) {
+            if (!err) { dfd.resolve(user); }
+            else {
+                console.log('error: ', err);
+                dfd.resolve(false);
+            }
+        });
 
         return dfd.promise;
     }

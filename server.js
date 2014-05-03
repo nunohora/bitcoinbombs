@@ -24,8 +24,19 @@ server.configure(function(){
     server.use(server.router);
 });
 
-//Register partials folder
+//Handlebars Configuration
 hbs.registerPartials(__dirname + '/views/partials');
+
+hbs.registerHelper('toJSON', function (object) {
+    return JSON.stringify(object);
+});
+
+hbs.registerHelper('ifCond', function(v1, v2, options) {
+  if(v1 === v2) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
 
 //setup the errors
 server.error(function(err, req, res, next){
@@ -33,6 +44,7 @@ server.error(function(err, req, res, next){
       console.log('not found');
       routes.notfound;
     } else {
+      console.log(err);
       console.log('server error');
       routes.servererror;
     }

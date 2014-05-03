@@ -4,9 +4,7 @@ var db    = require('../db'),
 
 exports.newUser = function(req, res){
     var urlPath;
-
-    utils.createGamePath();
-
+    
     when(db.createNewUser()).
     then(function (params) {
         urlPath = utils.createUrlPath({
@@ -19,21 +17,35 @@ exports.newUser = function(req, res){
             data: {
                 url: urlPath,
                 gameState: false,
-                btcAddress:
-            },
-            address: params.user.btcAddress
+                btcAddress: params.user.btcAddress,
+                currentStep: -1,
+                betValue: 0,
+                balance: 0
+            }
         });
     });
 };
 
 exports.oldUser = function (req, res) {
+    var urlPath;
+    
     when(db.getUser(req.params['user'], req.params['pass'])).
-    then(function (response) {
-        if (response) {
+    then(function (user) {
+        if (user) {
+            urlPath = utils.createUrlPath({
+                userId: req.params['user'],
+                pass: req.params['pass'],
+                hostname: req.headers.host
+            });
+
+            console.log(user.gameState);
             res.render('index', {
                 data: {
-                    url: null,
-                    btcAddress: response.btcAddress
+                    url: urlPath,
+                    gameState: user.gameState,
+                    btcAddress: user.btcAddress,
+                    currentStep: user.currentStep,
+                    betValue: user.betValue
                 }
             });
         }

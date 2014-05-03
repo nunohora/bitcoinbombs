@@ -19,5 +19,14 @@ module.exports = {
         }
 
         return path;
+    },
+
+    getUserDataFromUrl: function (url) {
+        var split = _.last(url.split('/'), 2);
+
+        return {
+            userId: _.first(split),
+            password: _.last(split)
+        };
     }
 };

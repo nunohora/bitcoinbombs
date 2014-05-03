@@ -1,5 +1,7 @@
-var io = require('socket.io'),
-    _  = require('underscore');
+var io   = require('socket.io'),
+    db   = require('./db'),
+    when = require('promised-io').when,
+    _    = require('underscore');
 
 module.exports = {
     initialize: function (server) {
@@ -19,9 +21,18 @@ module.exports = {
     onConnection: function (socket) {
         console.log('Client Connected');
 
-        socket.on('message', function (data) {
-            socket.broadcast.emit('server_message',data);
-            socket.emit('server_message',data);
+        socket.on('newGame', function (data) {
+            when(db.createNewGame(data)).
+            then(function (response) {
+                socket.emit('newGameResponse', response);
+            });
+        });
+
+        socket.on('steppedOn', function (data) {
+            when(db.checkStep(data)).
+            then(function (response) {
+                socket.emit('steppedOnResponse', response);
+            });
         });
     },
 

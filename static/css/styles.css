@@ -18,11 +18,16 @@ margin:0 4px 8px 0;
 width:108px;
 }
 
-.bet-type li,.step-row li {
+.bet-type.available li,.step-row.available .step-tile {
 cursor:pointer;
 }
 
-.bet-type li:hover {
+.bet-type.available li {
+    background: #804e2e;
+}
+
+.bet-type li,
+.bet-type.available li:hover {
 background:#666;
 }
 
@@ -150,8 +155,12 @@ margin-right:5px;
 width:40px;
 }
 
-.step-tile:hover {
-background:#f3610b;
+.step-row.available .step-tile {
+    background-color: #f68948;
+}
+
+.step-row.available .step-tile:hover {
+    background:#f3610b;
 }
 
 .take-reward {
