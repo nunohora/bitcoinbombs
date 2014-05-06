@@ -6,6 +6,8 @@ define(function (require) {
 
         el: 'body',
 
+        currentStep: 0,
+
         events: {
             'click .bet-type.available .bet' : 'newGame',
             'click .available .step-tile'    : 'step'
@@ -24,6 +26,7 @@ define(function (require) {
 
         bindSocketEvents: function () {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
+            this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
         },
 
         newGame: function (e) {
@@ -45,6 +48,29 @@ define(function (require) {
             }
         },
 
+        onSteppedOnResponse: function (data) {
+            if (data.status !== 'gameOver') {
+                this.highlightStepTiles(data.nextStep);
+                this.displayBombTile(data.bombTile, data.nextStep);
+                this.highLightCashoutTile(data.nextStep);
+            }
+            else {
+                this.gameOver(data.bombTiles);
+            }
+        },
+
+        displayBombTile: function (bombTile, step) {
+            var $stepRow = this.$el.find('.step-row')[step - 1],
+                $bombTile = $($stepRow).find('.step-tile')[bombTile - 1];
+
+            $($bombTile).addClass('bomb');
+        },
+
+        gameOver: function (bombTiles) {
+            console.log(bombTiles);
+            alert('Game Over');
+        },
+
         step: function (e) {
             var stepped = $(e.target).index() + 1;
             this.socket.emit('steppedOn', { stepped: stepped, url: this.data.url });
@@ -53,6 +79,10 @@ define(function (require) {
         toggleBetTypeClass: function () {
             var $betType = this.$el.find('.bet-type');
             $($betType).toggleClass('available');
+        },
+
+        highLightCashoutTile: function (nextStep) {
+
         },
 
         highlightStepTiles: function (step) {

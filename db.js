@@ -82,17 +82,34 @@ module.exports = {
             stepped = data.stepped,
             userData = utils.getUserDataFromUrl(data.url),
             userId = userData.userId,
-            password = userData.password;
+            password = userData.password,
+            self = this,
+            bombTile;
 
         when(this.authenticateUser(userId, password)).
         then(function (user) {
             if (user) {
-                
+                bombTile = user.currentGame[user.currentStep];
+                if (stepped === bombTile) {
+                    self.gameOver(user);
+                    dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped } );
+                }
+                else {
+                    user.currentStep = user.currentStep + 1;
+                    dfd.resolve( { status: 'carryOn',  bombTile: bombTile, nextStep: user.currentStep, stepped: stepped } );
+                }
+
             }
             else { dfd.resolve(false); }
         });
 
         return dfd.promise;
+    },
+
+    gameOver: function (user) {
+        user.gameState = 0;
+        user.betValue = 0;
+        user.currentStep = -1;
     },
 
     authenticateUser: function (userId, password) {
