@@ -39,6 +39,7 @@ define(function (require) {
 
         onNewGameResponse: function (data) {
             if (!data.error) {
+                this.data.gameState = true;
                 this.toggleBetTypeClass();
                 this.highlightStepTiles(data.nextStep);
                 this.updateBetValue(data.betValue);
@@ -67,13 +68,16 @@ define(function (require) {
         },
 
         gameOver: function (bombTiles) {
+            this.data.gameState = false;
             console.log(bombTiles);
             alert('Game Over');
         },
 
         step: function (e) {
-            var stepped = $(e.target).index() + 1;
-            this.socket.emit('steppedOn', { stepped: stepped, url: this.data.url });
+            if (this.data.gameState) {
+                var stepped = $(e.target).index() + 1;
+                this.socket.emit('steppedOn', { stepped: stepped, url: this.data.url });
+            }
         },
 
         toggleBetTypeClass: function () {
@@ -81,12 +85,21 @@ define(function (require) {
             $($betType).toggleClass('available');
         },
 
-        highLightCashoutTile: function (nextStep) {
+        highLightCashoutTile: function (step) {
+            var $reward = this.$el.find('.take-reward.take-it'),
+                $stepRow = this.$el.find('.step-row')[step - 1];
 
+            if($reward) {
+                $($reward).removeClass('take-it');
+            }
+            
+            $($stepRow).find('.take-reward').addClass('take-it');
         },
 
         highlightStepTiles: function (step) {
-            var $stepRow = this.$el.find('.step-row')[step - 1];
+            this.$el.find('.step-row.available').removeClass('available');
+
+            var $stepRow = this.$el.find('.step-row')[step];
             $($stepRow).addClass('available');
         },
 

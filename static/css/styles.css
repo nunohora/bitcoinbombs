@@ -45,10 +45,9 @@ padding-top:20px;
 font-weight:700;
 }
 
-.bomb {
-background-position:-6px -119px;
-height:32px;
-width:32px;
+.step-tile.bomb {
+-webkit-transition-duration: 0;
+background-position: -2px -115px;
 }
 
 .clearfix {
@@ -103,7 +102,7 @@ margin:10px 0;
 }
 
 .logo,.bomb,.step,.treasure,.refresh {
-background:url(../images/sprites.png) no-repeat;
+background: url(../images/sprites.png) no-repeat;
 }
 
 .menu {
@@ -168,6 +167,14 @@ border-radius:10px;
 height:40px;
 margin-left:9px;
 width:100px;
+}
+
+.take-reward.take-it {
+    cursor: pointer;
+    background-color: #cb5745;
+}
+.take-reward.take-it:hover {
+    background-color: #9d2612;
 }
 
 .tile {

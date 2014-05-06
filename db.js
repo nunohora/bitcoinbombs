@@ -60,13 +60,13 @@ module.exports = {
         then(function (user) {
             if (user) {
                 if (!user.gameState) {
-                    user.gameState = 1;
+                    user.gameState = true;
                     user.currentGame = utils.createGamePath();
                     user.currentStep = 0;
                     user.betValue = betValue;
 
                     user.save(function () {
-                        dfd.resolve({ betValue: betValue, nextStep: 1 });
+                        dfd.resolve({ betValue: betValue, nextStep: 0 });
                     });
                 }
                 else { dfd.resolve( { error: 'gamestarted' }); }
@@ -88,7 +88,7 @@ module.exports = {
 
         when(this.authenticateUser(userId, password)).
         then(function (user) {
-            if (user) {
+            if (user && user.gameState) {
                 bombTile = user.currentGame[user.currentStep];
                 if (stepped === bombTile) {
                     self.gameOver(user);
@@ -96,7 +96,9 @@ module.exports = {
                 }
                 else {
                     user.currentStep = user.currentStep + 1;
-                    dfd.resolve( { status: 'carryOn',  bombTile: bombTile, nextStep: user.currentStep, stepped: stepped } );
+                    user.save(function () {
+                        dfd.resolve( { status: 'carryOn',  bombTile: bombTile, nextStep: user.currentStep, stepped: stepped } );
+                    });
                 }
 
             }
@@ -107,9 +109,11 @@ module.exports = {
     },
 
     gameOver: function (user) {
-        user.gameState = 0;
+        user.gameState = false;
         user.betValue = 0;
         user.currentStep = -1;
+
+        user.save();
     },
 
     authenticateUser: function (userId, password) {
