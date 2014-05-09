@@ -45,11 +45,23 @@ padding-top:20px;
 font-weight:700;
 }
 
-.step-tile.bomb {
--webkit-transition-duration: 0;
-background-position: -2px -115px;
+.step-tile.bomb,
+.step-tile.stepped,
+.step-title.kaboom {
+    -webkit-transition-duration: 0;
 }
 
+.step-tile.bomb {
+    background-position: -2px -115px;
+}
+
+.step-tile.stepped {
+    background-position: -2px -158px;
+}
+
+.step-tile.kaboom {
+    background-position: -2px -158px;   
+}
 .clearfix {
 zoom:1;
 }
@@ -101,7 +113,7 @@ height:109px;
 margin:10px 0;
 }
 
-.logo,.bomb,.step,.treasure,.refresh {
+.logo,.bomb,.stepped,.treasure,.refresh {
 background: url(../images/sprites.png) no-repeat;
 }
 

@@ -22,7 +22,7 @@ module.exports = {
             userId: { type: Number, required: true },
             btcAddress: { type: String, index: { unique: true } },
             password: { type: String, required: true },
-            currentStep: { type: Number, required: true, default: -1 },
+            currentStep: { type: Number, required: true, default: 0 },
             gameState: { type: Boolean, required: true, default: 0 },
             betValue: { type: Number, required: true, default: 0 },
             currentGame: Array

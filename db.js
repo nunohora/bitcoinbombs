@@ -117,7 +117,7 @@ module.exports = {
     },
 
     authenticateUser: function (userId, password) {
-        dfd = new Deferred();
+        var dfd = new Deferred();
 
         this.model.getAuthenticated(userId, password, function (err, user) {
             if (!err) { dfd.resolve(user); }
