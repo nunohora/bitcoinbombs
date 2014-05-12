@@ -1,5 +1,6 @@
 var passGen = require('password-generator'),
-    _       = require('underscore');
+    _       = require('underscore'),
+    config  = require('./config');
 
 module.exports = {
     generatePassword: function () {
@@ -28,5 +29,22 @@ module.exports = {
             userId: _.first(split),
             password: _.last(split)
         };
+    },
+
+    getCurrentProgress: function (user) {
+        var stepRows = _.extend({}, config.stepRows);
+
+        console.log('BEFORE');
+        console.log(stepRows);
+        for (var i = 0; i < user.currentStep; i++) {
+            if (user.steppedOn[i]) {
+                stepRows[i].step = user.steppedOn[i];
+            }
+            stepRows[i].bomb = user.currentGame[i];
+        }
+
+        console.log('AFTER');
+        console.log(stepRows);
+        return stepRows;
     }
 };

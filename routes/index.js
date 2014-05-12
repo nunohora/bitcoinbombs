@@ -22,18 +22,19 @@ exports.newUser = function(req, res){
             },
             privateData: {
                 currentStep: -1,
+                takeRewardIndex: -1,
                 betValue: 0,
                 balance: 0,
-                stepRows: config.stepRows,
-                stepTiles: config.stepTiles,
-                steppedOn: []
+                currentProgress: config.stepRows,
+                stepTiles: config.stepTiles
             }
         });
     });
 };
 
 exports.oldUser = function (req, res) {
-    var urlPath;
+    var urlPath,
+        currentProgress;
     
     when(db.getUser(req.params['user'], req.params['pass'])).
     then(function (user) {
@@ -44,7 +45,10 @@ exports.oldUser = function (req, res) {
                 hostname: req.headers.host
             });
 
-            console.log(user.gameState);
+            currentProgress = user.gameState ? utils.getCurrentProgress(user) : config.stepRows;
+            
+            console.log('currentProgress: ', currentProgress);
+
             res.render('index', {
                 data: {
                     url: urlPath,
@@ -53,10 +57,10 @@ exports.oldUser = function (req, res) {
                 },
                 privateData: {
                     currentStep: user.currentStep,
+                    takeRewardIndex: user.currentStep - 1,
                     betValue: user.betValue,
-                    stepRows: config.stepRows,
-                    stepTiles: config.stepTiles,
-                    steppedOn: user.steppedOn
+                    currentProgress: currentProgress,
+                    stepTiles: config.stepTiles
                 }
             });
         }
