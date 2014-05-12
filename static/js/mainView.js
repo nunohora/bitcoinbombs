@@ -15,6 +15,9 @@ define(function (require) {
             this.socket = options.socket;
             this.data = this.$el.data().user;
 
+            this.$betTypeNode = this.$el.find('.bet-type');
+            this.$stepRows = this.$el.find('.step-row');
+
             if (this.data.url) {
                 window.history.pushState('bla', 'bla', this.data.url);
             }
@@ -30,6 +33,7 @@ define(function (require) {
         newGame: function (e) {
             var betValue = $(e.target).attr('value');
 
+            this.resetGame();
             if (!this.data.gameState) {
                 this.socket.emit('newGame', { betValue: betValue, url: this.data.url });
             }
@@ -55,45 +59,8 @@ define(function (require) {
                 this.highLightCashoutTile(data.nextStep);
             }
             else {
-                this.gameOver(data.bombTiles);
+                this.gameOver(data);
             }
-        },
-
-        displaySteppedOn: function (step, stepped) {
-            var $stepRow = this.$el.find('.step-row')[step - 1],
-                $stepTile = $($stepRow).find('.step-tile')[stepped];
-
-            $($stepTile).addClass('stepped');
-        },
-
-        displayBombTile: function (bombTile, step) {
-            var $stepRow = this.$el.find('.step-row')[step - 1],
-                $bombTile = $($stepRow).find('.step-tile')[bombTile];
-
-            $($bombTile).addClass('bomb');
-        },
-
-        displayAllBombTiles: function (bombTiles) {
-            var $stepRows = this.$el.find('.step-row'),
-                $stepRow,
-                $bombTile;
-
-            $.each(bombTiles, function (idx, bomb) {
-                $stepRow = $stepRows[idx];
-
-                if (!$($stepRow).find('.bomb').length || !$($stepRow).find('.kaboomb').length) {
-                    $bombTile = $($stepRow).find('.step-tile')[bomb];
-
-                    console.log($bombTile);
-                    $($bombTile).addClass('bomb');
-                }
-            });
-        },
-
-        gameOver: function (bombTiles) {
-            this.data.gameState = false;
-            this.displayAllBombTiles(bombTiles);
-            alert('Game Over');
         },
 
         step: function (e) {
@@ -103,14 +70,67 @@ define(function (require) {
             }
         },
 
+        displaySteppedOn: function (step, stepped) {
+            var $stepRow = $(this.$stepRows)[step - 1],
+                $stepTile = $($stepRow).find('.step-tile')[stepped];
+
+            $($stepTile).addClass('stepped');
+        },
+
+        displayBombTile: function (bombTile, step) {
+            var $stepRow = $(this.$stepRows)[step - 1],
+                $bombTile = $($stepRow).find('.step-tile')[bombTile];
+
+            $($bombTile).addClass('bomb');
+        },
+
+        displayAllBombTiles: function (bombTiles) {
+            var self = this,
+                $stepRow,
+                $bombTile;
+
+            $.each(bombTiles, function (idx, bomb) {
+                $stepRow = self.$stepRows[idx];
+
+                if (!$($stepRow).find('.bomb').length || !$($stepRow).find('.kaboomb').length) {
+                    $bombTile = $($stepRow).find('.step-tile')[bomb];
+
+                    $($bombTile).addClass('bomb');
+                }
+            });
+        },
+
+        gameOver: function (data) {
+            $(this.$stepRows).removeClass('available');
+            $(this.$stepRows).find('.take-reward.take-it').removeClass('take-it');
+            
+            this.toggleBetTypeClass();
+            this.displayKaboomTile(data.stepped, data.bombStep);
+            this.displayAllBombTiles(data.bombTiles);
+            
+            this.data.gameState = false;
+        },
+
+        resetGame: function () {
+            $(this.$stepRows).find('.bomb').removeClass('bomb');
+            $(this.$stepRows).find('.kaboom').removeClass('kaboom');
+            $(this.$stepRows).find('.stepped').removeClass('stepped');
+        },
+
+        displayKaboomTile: function(stepped, bombStep) {
+            var $stepRow = $(this.$stepRows)[bombStep],
+                $stepTile = $($stepRow).find('.step-tile')[stepped];
+            
+            $($stepTile).addClass('kaboom');
+        },
+
         toggleBetTypeClass: function () {
-            var $betType = this.$el.find('.bet-type');
-            $($betType).toggleClass('available');
+            $(this.$betTypeNode).toggleClass('available');
         },
 
         highLightCashoutTile: function (step) {
             var $reward = this.$el.find('.take-reward.take-it'),
-                $stepRow = this.$el.find('.step-row')[step];
+                $stepRow = this.$el.find('.step-row')[step - 1];
 
             if($reward) {
                 $($reward).removeClass('take-it');
@@ -120,9 +140,9 @@ define(function (require) {
         },
 
         highlightStepTiles: function (step) {
-            this.$el.find('.step-row.available').removeClass('available');
+            $(this.$stepRows).removeClass('available');
 
-            var $stepRow = this.$el.find('.step-row')[step];
+            var $stepRow = $(this.$stepRows)[step];
             $($stepRow).addClass('available');
         },
 

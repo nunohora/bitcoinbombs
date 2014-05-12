@@ -25,7 +25,8 @@ module.exports = {
             currentStep: { type: Number, required: true, default: 0 },
             gameState: { type: Boolean, required: true, default: 0 },
             betValue: { type: Number, required: true, default: 0 },
-            currentGame: Array
+            currentGame: Array,
+            steppedOn: Array
         });
 
         UserSchema.pre('save', function(next) {

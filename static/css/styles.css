@@ -60,7 +60,7 @@ font-weight:700;
 }
 
 .step-tile.kaboom {
-    background-position: -2px -158px;   
+    background-position: 3px -273px;
 }
 .clearfix {
 zoom:1;
@@ -113,7 +113,7 @@ height:109px;
 margin:10px 0;
 }
 
-.logo,.bomb,.stepped,.treasure,.refresh {
+.logo,.bomb,.stepped,.treasure,.refresh,.kaboom {
 background: url(../images/sprites.png) no-repeat;
 }
 

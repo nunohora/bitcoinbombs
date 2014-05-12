@@ -16,95 +16,15 @@
         </ul>
     </div>
     <ul class="game-steps">
-        <li class="step-row {{#ifCond data.currentStep 0 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 1.2</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 1 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 1.4</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 2 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 1.6</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 3 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 2</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 4 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 2.5</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 5 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 3</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 6 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 4</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 7 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 5</li>
-            </ul>
-        </li>
-        <li class="step-row {{#ifCond data.currentStep 8 }}available{{/ifCond}}">
-            <ul>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="step-tile"></li>
-                <li class="take-reward tile">Take bet * 6</li>
-            </ul>
-        </li>
+        {{#each privateData.stepRows}}
+            <li class="step-row {{#ifCond @index ../privateData.currentStep}}available{{/ifCond}}">
+                <ul>
+                    {{#each ../privateData.stepTiles}}
+                        <li class="step-tile"></li>
+                    {{/each}}
+                    <li class="take-reward tile">Take bet * {{this.rewardValue}}</li>
+                </ul>
+            </li>
+        {{/each}}
     </ul>
 </article>

@@ -1,6 +1,7 @@
-var db    = require('../db'),
-    utils = require('../utils'),
-    when  = require('promised-io').when;
+var db     = require('../db'),
+    utils  = require('../utils'),
+    config = require('../config'),
+    when   = require('promised-io').when;
 
 exports.newUser = function(req, res){
     var urlPath;
@@ -17,10 +18,15 @@ exports.newUser = function(req, res){
             data: {
                 url: urlPath,
                 gameState: false,
-                btcAddress: params.user.btcAddress,
+                btcAddress: params.user.btcAddress
+            },
+            privateData: {
                 currentStep: -1,
                 betValue: 0,
-                balance: 0
+                balance: 0,
+                stepRows: config.stepRows,
+                stepTiles: config.stepTiles,
+                steppedOn: []
             }
         });
     });
@@ -43,9 +49,14 @@ exports.oldUser = function (req, res) {
                 data: {
                     url: urlPath,
                     gameState: user.gameState,
-                    btcAddress: user.btcAddress,
+                    btcAddress: user.btcAddress
+                },
+                privateData: {
                     currentStep: user.currentStep,
-                    betValue: user.betValue
+                    betValue: user.betValue,
+                    stepRows: config.stepRows,
+                    stepTiles: config.stepTiles,
+                    steppedOn: user.steppedOn
                 }
             });
         }

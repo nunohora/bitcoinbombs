@@ -84,6 +84,7 @@ module.exports = {
             userId = userData.userId,
             password = userData.password,
             self = this,
+            bombStep,
             bombTile;
 
         when(this.authenticateUser(userId, password)).
@@ -91,8 +92,9 @@ module.exports = {
             if (user && user.gameState) {
                 bombTile = user.currentGame[user.currentStep];
                 if (stepped === bombTile) {
+                    bombStep = user.currentStep;
                     self.gameOver(user);
-                    dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped } );
+                    dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped, bombStep: bombStep } );
                 }
                 else {
                     user.currentStep = user.currentStep + 1;

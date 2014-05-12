@@ -38,6 +38,13 @@ hbs.registerHelper('ifCond', function(v1, v2, options) {
   return options.inverse(this);
 });
 
+hbs.registerHelper('times', function(n, options) {
+    var accum = '';
+    for(var i = 0; i < n; ++i)
+        accum += options.fn(i);
+    return accum;
+});
+
 //setup the errors
 server.error(function(err, req, res, next){
     if (err instanceof NotFound) {
