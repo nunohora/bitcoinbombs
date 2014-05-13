@@ -32,10 +32,9 @@ module.exports = {
     },
 
     getCurrentProgress: function (user) {
-        var stepRows = _.extend({}, config.stepRows);
+        //deep clone of object
+        var stepRows = JSON.parse(JSON.stringify(config.stepRows));
 
-        console.log('BEFORE');
-        console.log(stepRows);
         for (var i = 0; i < user.currentStep; i++) {
             if (user.steppedOn[i]) {
                 stepRows[i].step = user.steppedOn[i];
@@ -43,8 +42,6 @@ module.exports = {
             stepRows[i].bomb = user.currentGame[i];
         }
 
-        console.log('AFTER');
-        console.log(stepRows);
         return stepRows;
     }
 };

@@ -97,6 +97,7 @@ module.exports = {
                     dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped, bombStep: bombStep } );
                 }
                 else {
+                    console.log('stepped: ', stepped);
                     user.steppedOn.push(stepped);
                     user.currentStep = user.currentStep + 1;
                     user.save(function () {
