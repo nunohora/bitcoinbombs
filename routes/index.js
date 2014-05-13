@@ -5,7 +5,7 @@ var db     = require('../db'),
 
 exports.newUser = function(req, res){
     var urlPath;
-    
+
     when(db.createNewUser()).
     then(function (params) {
         urlPath = utils.createUrlPath({
@@ -35,7 +35,7 @@ exports.newUser = function(req, res){
 exports.oldUser = function (req, res) {
     var urlPath,
         currentProgress;
-    
+
     when(db.getUser(req.params['user'], req.params['pass'])).
     then(function (user) {
         if (user) {
@@ -46,8 +46,6 @@ exports.oldUser = function (req, res) {
             });
 
             currentProgress = user.gameState ? utils.getCurrentProgress(user) : config.stepRows;
-            
-            console.log('currentProgress: ', currentProgress);
 
             res.render('index', {
                 data: {
@@ -56,7 +54,7 @@ exports.oldUser = function (req, res) {
                     btcAddress: user.btcAddress
                 },
                 privateData: {
-                    currentStep: user.currentStep,
+                    currentStep: user.gameState ? user.currentStep : -1,
                     takeRewardIndex: user.currentStep - 1,
                     betValue: user.betValue,
                     currentProgress: currentProgress,

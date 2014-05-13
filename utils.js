@@ -36,9 +36,7 @@ module.exports = {
         var stepRows = JSON.parse(JSON.stringify(config.stepRows));
 
         for (var i = 0; i < user.currentStep; i++) {
-            if (user.steppedOn[i]) {
-                stepRows[i].step = user.steppedOn[i];
-            }
+            stepRows[i].step = user.steppedOn[i];
             stepRows[i].bomb = user.currentGame[i];
         }
 
