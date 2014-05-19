@@ -22,10 +22,13 @@ requirejs.config({
 });
 
 requirejs(['domReady', 'socketio', 'mainView'], function (domReady, io, mainView) {
-    var socket = io.connect();
+    'use strict';
+
+    var socket = io.connect(),
+        View;
 
     domReady(function () {
-        view = new mainView({
+        View = new mainView({
             socket: socket
         });
     });

@@ -1,4 +1,6 @@
 define(function (require) {
+    'use strict';
+    
     var Backbone    = require('backbone'),
         modal       = require('modal'),
         $           = require('jquery'),
@@ -38,18 +40,23 @@ define(function (require) {
 
         onDepositClick: function () {
             var tpl = _.template(depositTpl, {
-                btcAddress: this.data.btcAddress});
+                btcAddress: this.data.btcAddress
+            });
 
             this.showModal(tpl);
         },
 
         onWithdrawClick: function () {
-            this.showModal('yo');
+            var tpl =_.template(withdrawTpl, {
+                balance: this.data.balance
+            });
+
+            this.showModal(tpl);
         },
 
         showModal: function (template) {
             $.modal(template);
-        }
+        },
 
         newGame: function (e) {
             var betValue = $(e.target).attr('value');
