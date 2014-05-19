@@ -9,12 +9,15 @@ requirejs.config({
         }
     },
     paths: {
+        templates : '/templates',
         underscore: '/js/underscore.min',
         backbone  : '/js/backbone.min',
         domReady  : '/js/domReady.min',
         jquery    : '/js/jquery.min',
+        text      : '/js/text.min',
+        modal     : '/js/jquery.simplemodal.min',
         socketio  : '/socket.io/socket.io',
-        mainView  : '/js/mainView',
+        mainView  : '/js/mainView'
     }
 });
 

@@ -1,6 +1,10 @@
 define(function (require) {
-    var Backbone = require('backbone'),
-        $        = require('jquery');
+    var Backbone    = require('backbone'),
+        modal       = require('modal'),
+        $           = require('jquery'),
+        depositTpl  = require('text!templates/deposit.tpl'),
+        withdrawTpl = require('text!templates/withdraw.tpl'),
+        noFundsTpl  = require('text!templates/notEnoughFunds.tpl');
 
     return Backbone.View.extend({
 
@@ -8,7 +12,9 @@ define(function (require) {
 
         events: {
             'click .bet-type.available .bet' : 'newGame',
-            'click .available .step-tile'    : 'step'
+            'click .available .step-tile'    : 'step',
+            'click a.deposit'                : 'onDepositClick',
+            'click a.withdraw'               : 'onWithdrawClick'
         },
 
         initialize: function (options) {
@@ -29,6 +35,21 @@ define(function (require) {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
         },
+
+        onDepositClick: function () {
+            var tpl = _.template(depositTpl, {
+                btcAddress: this.data.btcAddress});
+
+            this.showModal(tpl);
+        },
+
+        onWithdrawClick: function () {
+            this.showModal('yo');
+        },
+
+        showModal: function (template) {
+            $.modal(template);
+        }
 
         newGame: function (e) {
             var betValue = $(e.target).attr('value');
@@ -103,11 +124,11 @@ define(function (require) {
         gameOver: function (data) {
             $(this.$stepRows).removeClass('available');
             $(this.$stepRows).find('.take-reward.take-it').removeClass('take-it');
-            
+
             this.toggleBetTypeClass();
             this.displayKaboomTile(data.stepped, data.bombStep);
             this.displayAllBombTiles(data.bombTiles);
-            
+
             this.data.gameState = false;
         },
 
@@ -120,7 +141,7 @@ define(function (require) {
         displayKaboomTile: function(stepped, bombStep) {
             var $stepRow = $(this.$stepRows)[bombStep],
                 $stepTile = $($stepRow).find('.step-tile')[stepped];
-            
+
             $($stepTile).addClass('kaboom');
         },
 
@@ -135,7 +156,7 @@ define(function (require) {
             if($reward) {
                 $($reward).removeClass('take-it');
             }
-            
+
             $($stepRow).find('.take-reward').addClass('take-it');
         },
 
