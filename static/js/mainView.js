@@ -1,6 +1,6 @@
 define(function (require) {
     'use strict';
-    
+
     var Backbone    = require('backbone'),
         modal       = require('modal'),
         _           = require('underscore'),
@@ -38,7 +38,7 @@ define(function (require) {
         bindSocketEvents: function () {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
-            this.socket.on('refreshBalanceResponse', $.proxy(this.onRfreshBalanceResponse), this);
+            this.socket.on('refreshBalanceResponse', $.proxy(this.onRefreshBalanceResponse), this);
         },
 
         onDepositClick: function (e) {
@@ -67,9 +67,13 @@ define(function (require) {
             this.refreshBalance();
         },
 
+        onRefreshBalanceResponse: function (data) {
+            $('.balance').text(data.balance);
+        },
+
         refreshBalance: _.debounce(function () {
             this.socket.emit('refreshBalance', { url: this.data.url });
-        }, 2000),
+        }, 1000),
 
         showModal: function (template) {
             $.modal(template);

@@ -52,11 +52,9 @@ module.exports = {
     createNewGame: function (data) {
         var dfd = new Deferred(),
             betValue = data.betValue,
-            userData = utils.getUserDataFromUrl(data.url),
-            userId = userData.userId,
-            password = userData.password;
+            userData = utils.getUserDataFromUrl(data.url);
 
-        when(this.authenticateUser(userId, password)).
+        when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user) {
                 if (!user.gameState) {
@@ -81,17 +79,15 @@ module.exports = {
         var dfd = new Deferred(),
             userData = utils.getUserDataFromUrl(data.url);
 
-            console.log(userData);
-
             when(this.authenticateUser(userData.userId, userData.password)).
             then(function (user) {
                 if (user) {
                     when(blockchain.getAddressBalance(user.btcAddress)).
                     then(function (balance) {
-                        console.log('BALANCE!!!');
-                        console.log(balance);
-
-                        dfd.resolve({ balance: balance});
+                        user.balance = balance;
+                        user.save(function () {
+                            dfd.resolve({ balance: balance});
+                        });
                     });
                 }
                 else { dfd.resolve(false); }
