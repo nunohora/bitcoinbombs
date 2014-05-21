@@ -34,6 +34,13 @@ module.exports = {
                 socket.emit('steppedOnResponse', response);
             });
         });
+
+        socket.on('refreshBalance', function (data) {
+            when(db.checkUserBalance(data)).
+            then(function (response) {
+                socket.emit('refreshBalanceResponse', response);
+            });
+        });
     },
 
     onDisconnect: function () {

@@ -348,7 +348,17 @@ padding:0;
 .simplemodal-data .withdraw-btn {
     text-align: center;
 }
-
+.simplemodal-data .left {
+    margin-top: 30px;
+}
+.simplemodal-data .left span {
+    font-weight: bold;
+}
+.simplemodal-data .right {
+    width: 250px;
+    height: 250px;
+    margin: auto;
+}
 .simplemodal-data button {
     outline: none;
     font-size: 16px;

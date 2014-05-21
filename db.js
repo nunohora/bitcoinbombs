@@ -77,17 +77,38 @@ module.exports = {
         return dfd.promise;
     },
 
+    checkUserBalance: function (data) {
+        var dfd = new Deferred(),
+            userData = utils.getUserDataFromUrl(data.url);
+
+            console.log(userData);
+
+            when(this.authenticateUser(userData.userId, userData.password)).
+            then(function (user) {
+                if (user) {
+                    when(blockchain.getAddressBalance(user.btcAddress)).
+                    then(function (balance) {
+                        console.log('BALANCE!!!');
+                        console.log(balance);
+
+                        dfd.resolve({ balance: balance});
+                    });
+                }
+                else { dfd.resolve(false); }
+            });
+
+        return dfd.promise;
+    },
+
     checkStep: function (data) {
         var dfd = new Deferred(),
             stepped = data.stepped,
             userData = utils.getUserDataFromUrl(data.url),
-            userId = userData.userId,
-            password = userData.password,
             self = this,
             bombStep,
             bombTile;
 
-        when(this.authenticateUser(userId, password)).
+        when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user && user.gameState) {
                 bombTile = user.currentGame[user.currentStep];
@@ -98,7 +119,6 @@ module.exports = {
                 }
                 else {
                     user.steppedOn.push(stepped);
-                    console.log('steppedOn: ', user.steppedOn);
                     user.currentStep = user.currentStep + 1;
                     user.save(function () {
                         dfd.resolve( { status: 'carryOn',  bombTile: bombTile, nextStep: user.currentStep, stepped: stepped } );

@@ -3,6 +3,7 @@ define(function (require) {
     
     var Backbone    = require('backbone'),
         modal       = require('modal'),
+        _           = require('underscore'),
         $           = require('jquery'),
         depositTpl  = require('text!templates/deposit.tpl'),
         withdrawTpl = require('text!templates/withdraw.tpl'),
@@ -16,7 +17,8 @@ define(function (require) {
             'click .bet-type.available .bet' : 'newGame',
             'click .available .step-tile'    : 'step',
             'click a.deposit'                : 'onDepositClick',
-            'click a.withdraw'               : 'onWithdrawClick'
+            'click a.withdraw'               : 'onWithdrawClick',
+            'click a.refresh'                : 'onRefreshClick'
         },
 
         initialize: function (options) {
@@ -36,9 +38,12 @@ define(function (require) {
         bindSocketEvents: function () {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
+            this.socket.on('refreshBalanceResponse', $.proxy(this.onRfreshBalanceResponse), this);
         },
 
-        onDepositClick: function () {
+        onDepositClick: function (e) {
+            e.preventDefault();
+
             var tpl = _.template(depositTpl, {
                 btcAddress: this.data.btcAddress
             });
@@ -46,13 +51,25 @@ define(function (require) {
             this.showModal(tpl);
         },
 
-        onWithdrawClick: function () {
+        onWithdrawClick: function (e) {
+            e.preventDefault();
+
             var tpl =_.template(withdrawTpl, {
                 balance: this.data.balance
             });
 
             this.showModal(tpl);
         },
+
+        onRefreshClick: function (e) {
+            e.preventDefault();
+
+            this.refreshBalance();
+        },
+
+        refreshBalance: _.debounce(function () {
+            this.socket.emit('refreshBalance', { url: this.data.url });
+        }, 2000),
 
         showModal: function (template) {
             $.modal(template);
