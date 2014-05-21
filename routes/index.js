@@ -58,7 +58,8 @@ exports.oldUser = function (req, res) {
                     takeRewardIndex: user.currentStep - 1,
                     betValue: user.betValue,
                     currentProgress: currentProgress,
-                    stepTiles: config.stepTiles
+                    stepTiles: config.stepTiles,
+                    balance: user.balance
                 }
             });
         }

@@ -42,7 +42,15 @@ module.exports = {
 
         when(this.authenticateUser(userId, password)).
         then(function (user) {
-            if (user) { dfd.resolve(user); }
+            if (user) {
+                when(blockchain.getAddressBalance(user.btcAddress)).
+                then(function (balance) {
+                    user.balance = balance;
+                    user.save(function () {
+                        dfd.resolve(user);
+                    })
+                });
+            }
             else { dfd.resolve(false); }
         });
 
