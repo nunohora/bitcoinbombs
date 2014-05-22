@@ -39,10 +39,17 @@ define(function (require) {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
             this.socket.on('refreshBalanceResponse', $.proxy(this.updateBalance, this));
+            this.socket.on('onDepositModalClickResponse', $.proxy(this.showDepositModal, this));
         },
 
         onDepositClick: function (e) {
             e.preventDefault();
+
+            this.socket.emit('onDepositModalClick', { url: this.data.url });
+        },
+
+        showDepositModal: function (data) {
+            this.data.btcAddress = data.btcAddress;
 
             var tpl = _.template(depositTpl, {
                 btcAddress: this.data.btcAddress

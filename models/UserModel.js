@@ -20,8 +20,8 @@ module.exports = {
 
         UserSchema = new mongoose.Schema({
             userId: { type: Number, required: true },
-            btcAddress: { type: String, index: { unique: true } },
             password: { type: String, required: true },
+            btcAddress: { type: String, default: '' },
             currentStep: { type: Number, required: true, default: 0 },
             gameState: { type: Boolean, required: true, default: 0 },
             betValue: { type: Number, required: true, default: 0 },
@@ -60,14 +60,23 @@ module.exports = {
 
         UserSchema.statics.getAuthenticated = function(userId, password, cb) {
             this.findOne({ userId: userId }, function(err, user) {
-                if (err) return cb(err);
+                if (err) {
+                    console.log('error: ', err);
+                    return cb(err);
+                }
 
                 // make sure the user exists
-                if (!user) return cb(true, null);
+                if (!user) {
+                    console.log('error: no user found');
+                    return cb(true, null);
+                }
 
                 // test for a matching password
                 user.comparePassword(password, function(err, isMatch) {
-                    if (err) return cb(err);
+                    if (err) {
+                        console.log('error: ', err);
+                        return cb(err);
+                    }
 
                     // check if the password was a match
                     if (isMatch) return cb(false, user);

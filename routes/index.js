@@ -18,7 +18,6 @@ exports.newUser = function(req, res){
             data: {
                 url: urlPath,
                 gameState: false,
-                btcAddress: params.user.btcAddress,
                 balance: 0
             },
             privateData: {
@@ -51,7 +50,6 @@ exports.oldUser = function (req, res) {
                 data: {
                     url: urlPath,
                     gameState: user.gameState,
-                    btcAddress: user.btcAddress,
                     balance: user.balance
                 },
                 privateData: {

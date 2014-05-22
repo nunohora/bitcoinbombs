@@ -26,12 +26,36 @@ module.exports = {
             password: pass
         });
 
-        when(blockchain.getNewAddress()).
-        then(function (newAddress) {
-            newUser.btcAddress = newAddress;
-            newUser.save(function () {
-                dfd.resolve({ user: newUser, password: pass, address: newAddress });
-            });
+        newUser.save(function () {
+            dfd.resolve({ user: newUser, password: pass });
+        });
+
+        return dfd.promise;
+    },
+
+    getUserBtcAddress: function (data) {
+        var dfd = new Deferred(),
+            userData = utils.getUserDataFromUrl(data.url);
+
+        when(this.authenticateUser(userData.userId, userData.password)).
+        then(function (user) {
+            if (user) {
+                if (user.btcAddress) {
+                    dfd.resolve({ btcAddress: user.btcAddress });
+                }
+                else {
+                    when(blockchain.getNewAddress()).
+                    then(function (address) {
+                        console.log('address: ', address);
+                        console.log('user: ', user);
+                        user.btcAddress = address;
+                        user.save(function () {
+                            dfd.resolve({ btcAddress: address });
+                        });
+                    });
+                }
+            }
+            else { dfd.resolve(false); }
         });
 
         return dfd.promise;

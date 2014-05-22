@@ -7,7 +7,7 @@ module.exports = {
     initialize: function (server) {
         //Setup Socket.IO
         var iosocket = io.listen(server);
-        
+
         this.bindEvents(iosocket);
     },
 
@@ -39,6 +39,13 @@ module.exports = {
             when(db.checkUserBalance(data)).
             then(function (response) {
                 socket.emit('refreshBalanceResponse', response);
+            });
+        });
+
+        socket.on('onDepositModalClick', function (data) {
+            when(db.getUserBtcAddress(data)).
+            then(function (response) {
+                socket.emit('onDepositModalClickResponse', response);
             });
         });
     },
