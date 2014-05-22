@@ -18,13 +18,13 @@ exports.newUser = function(req, res){
             data: {
                 url: urlPath,
                 gameState: false,
-                btcAddress: params.user.btcAddress
+                btcAddress: params.user.btcAddress,
+                balance: 0
             },
             privateData: {
                 currentStep: -1,
                 takeRewardIndex: -1,
                 betValue: 0,
-                balance: 0,
                 currentProgress: config.stepRows,
                 stepTiles: config.stepTiles
             }
@@ -51,15 +51,15 @@ exports.oldUser = function (req, res) {
                 data: {
                     url: urlPath,
                     gameState: user.gameState,
-                    btcAddress: user.btcAddress
+                    btcAddress: user.btcAddress,
+                    balance: user.balance
                 },
                 privateData: {
                     currentStep: user.gameState ? user.currentStep : -1,
                     takeRewardIndex: user.currentStep - 1,
                     betValue: user.betValue,
                     currentProgress: currentProgress,
-                    stepTiles: config.stepTiles,
-                    balance: user.balance
+                    stepTiles: config.stepTiles
                 }
             });
         }

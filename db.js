@@ -48,7 +48,7 @@ module.exports = {
                     user.balance = balance;
                     user.save(function () {
                         dfd.resolve(user);
-                    })
+                    });
                 });
             }
             else { dfd.resolve(false); }
@@ -65,14 +65,15 @@ module.exports = {
         when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user) {
-                if (!user.gameState) {
+                if (!user.gameState && user.balance >= betValue) {
                     user.gameState = true;
                     user.currentGame = utils.createGamePath();
                     user.currentStep = 0;
                     user.betValue = betValue;
+                    user.balance = user.balance - betValue;
 
                     user.save(function () {
-                        dfd.resolve({ betValue: betValue, nextStep: 0 });
+                        dfd.resolve({ betValue: betValue, nextStep: 0, balance: user.balance });
                     });
                 }
                 else { dfd.resolve( { error: 'gamestarted' }); }
@@ -118,8 +119,10 @@ module.exports = {
                 bombTile = user.currentGame[user.currentStep];
                 if (stepped === bombTile) {
                     bombStep = user.currentStep;
-                    self.gameOver(user);
-                    dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped, bombStep: bombStep } );
+                    when(self.gameOver(user)).
+                    then(function () {
+                        dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped, bombStep: bombStep } );
+                    });
                 }
                 else {
                     user.steppedOn.push(stepped);
@@ -137,12 +140,18 @@ module.exports = {
     },
 
     gameOver: function (user) {
+        var dfd = new Deferred();
+
         user.gameState = false;
         user.betValue = 0;
         user.currentStep = -1;
         user.steppedOn = [];
 
-        user.save();
+        user.save(function () {
+            dfd.resolve(true);
+        });
+
+        return dfd.promise;
     },
 
     authenticateUser: function (userId, password) {

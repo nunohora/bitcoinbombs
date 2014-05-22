@@ -5,6 +5,8 @@ module.exports = {
 
     bcConf: 5,
 
+    mainAddress: '***REMOVED***',
+
     'stepRows': [
         { 'rewardValue': 1.2, bomb: null, step: null },
         { 'rewardValue': 1.4, bomb: null, step: null },

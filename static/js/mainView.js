@@ -38,7 +38,7 @@ define(function (require) {
         bindSocketEvents: function () {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
-            this.socket.on('refreshBalanceResponse', $.proxy(this.onRefreshBalanceResponse), this);
+            this.socket.on('refreshBalanceResponse', $.proxy(this.updateBalance, this));
         },
 
         onDepositClick: function (e) {
@@ -67,7 +67,17 @@ define(function (require) {
             this.refreshBalance();
         },
 
-        onRefreshBalanceResponse: function (data) {
+        hasEnoughBalance: function (betValue) {
+            if (betValue > this.data.balance) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        },
+
+        updateBalance: function (data) {
+            this.data.balance = data.balance;
             $('.balance').text(data.balance);
         },
 
@@ -94,6 +104,7 @@ define(function (require) {
                 this.toggleBetTypeClass();
                 this.highlightStepTiles(data.nextStep);
                 this.updateBetValue(data.betValue);
+                this.updateBalance(data);
             }
             else {
                 alert('You are already playing a game');
