@@ -14,7 +14,8 @@
     "underscore": "1.6.0",
     "password-generator": "0.2.2",
     "bcrypt": "0.7.7",
-    "mongoose-auto-increment": "3.0.2"
+    "mongoose-auto-increment": "3.0.2",
+    "cron": "1.0.4"
   },
   "devDependencies": {
     "vows": "0.5.x",

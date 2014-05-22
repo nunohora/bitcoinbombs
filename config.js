@@ -3,7 +3,7 @@ module.exports = {
 
     bcPass: '***REMOVED***',
 
-    bcConf: 5,
+    bcConf: 1,
 
     mainAddress: '***REMOVED***',
 

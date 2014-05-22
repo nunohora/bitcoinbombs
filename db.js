@@ -166,13 +166,16 @@ module.exports = {
     gameOver: function (user) {
         var dfd = new Deferred();
 
-        user.gameState = false;
-        user.betValue = 0;
-        user.currentStep = -1;
-        user.steppedOn = [];
+        when(blockchain.transferLostBet(user.btcAddress, user.betValue)).
+        then(function (response) {
+            user.gameState = false;
+            user.betValue = 0;
+            user.currentStep = -1;
+            user.steppedOn = [];
 
-        user.save(function () {
-            dfd.resolve(true);
+            user.save(function () {
+                dfd.resolve(true);
+            });
         });
 
         return dfd.promise;

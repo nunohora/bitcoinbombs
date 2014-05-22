@@ -41,5 +41,13 @@ module.exports = {
         }
 
         return stepRows;
+    },
+
+    satoshiToBtc: function (satoshi) {
+        return satoshi / 100000000;
+    },
+
+    btcToSatoshi: function (btc) {
+        return btc * 100000000;
     }
 };
