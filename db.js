@@ -96,7 +96,11 @@ module.exports = {
                         user.balance = user.balance - betValue;
 
                         user.save(function () {
-                            dfd.resolve({ betValue: betValue, nextStep: 0, balance: user.balance });
+                            dfd.resolve({
+                                betValue: betValue,
+                                nextStep: 0,
+                                balance: user.balance
+                            });
                         });
                     }
                     else {
@@ -127,15 +131,7 @@ module.exports = {
                     self.resetGame(user);
 
                     user.save(function () {
-                        if (reward > 0) {
-                            when(blockchain.transferWinningBet(user.btcAddress, reward)).
-                            then(function (response) {
-                                dfd.resolve({ balance: user.balance });
-                            });
-                        }
-                        else {
-                            dfd.resolve({ balance: user.balance });
-                        }
+                        dfd.resolve({ balance: user.balance });
                     });
                 }
                 else { dfd.resolve(false); }
@@ -153,13 +149,27 @@ module.exports = {
         when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user) {
-                when(blockchain.getAddressBalance(user.btcAddress)).
-                then(function (balance) {
-                    user.balance = balance;
-                    user.save(function () {
-                        dfd.resolve({ balance: balance});
-                    });
-                });
+                if (user.btcAddress) {
+                    if (user.hasMadeDeposit) {
+                        dfd.resolve({ balance: user.balance});
+                    }
+                    else {
+                        when(blockchain.getAddressBalance(user.btcAddress)).
+                        then(function (balance) {
+                            if (balance > 0) {
+                                user.balance = balance;
+                                user.hasMadeDeposit = true;
+                            }
+
+                            user.save(function () {
+                                dfd.resolve({ balance: balance});
+                            });
+                        });
+                    }
+                }
+                else {
+                    dfd.resolve({ balance: 0} );
+                }
             }
             else { dfd.resolve(false); }
         });
@@ -183,14 +193,25 @@ module.exports = {
                     bombStep = user.currentStep;
                     when(self.gameOver(user)).
                     then(function () {
-                        dfd.resolve( { status: 'gameOver', bombTiles: user.currentGame, stepped: stepped, bombStep: bombStep } );
+                        dfd.resolve( {
+                            status: 'gameOver',
+                            bombTiles: user.currentGame,
+                            stepped: stepped,
+                            bombStep: bombStep,
+                            balance: user.balance
+                        });
                     });
                 }
                 else {
                     user.steppedOn.push(stepped);
                     user.currentStep = user.currentStep + 1;
                     user.save(function () {
-                        dfd.resolve( { status: 'carryOn',  bombTile: bombTile, nextStep: user.currentStep, stepped: stepped } );
+                        dfd.resolve({
+                            status: 'carryOn',
+                            bombTile: bombTile,
+                            nextStep: user.currentStep,
+                            stepped: stepped
+                        });
                     });
                 }
 
@@ -205,19 +226,19 @@ module.exports = {
         var dfd = new Deferred(),
             self = this;
 
-        this.resetGame(user);
-
         if (user.betValue > 0) {
             when(blockchain.transferLostBet(user.btcAddress, user.betValue)).
             then(function (response) {
                 user.balance = user.balance - user.betValue;
 
+                self.resetGame(user);
                 user.save(function () {
                     dfd.resolve(true);
                 });
             });
         }
         else {
+            self.resetGame(user);
             user.save(function () {
                 dfd.resolve(true);
             });

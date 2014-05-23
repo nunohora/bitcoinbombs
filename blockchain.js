@@ -40,6 +40,7 @@ module.exports = {
 
         when(self._makeTransaction(address, config.mainAddress, amount)).
         then(function (response) {
+            console.log('lost bet: ', response);
             dfd.resolve(response);
         });
 
