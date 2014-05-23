@@ -46,8 +46,6 @@ module.exports = {
                 else {
                     when(blockchain.getNewAddress()).
                     then(function (address) {
-                        console.log('address: ', address);
-                        console.log('user: ', user);
                         user.btcAddress = address;
                         user.save(function () {
                             dfd.resolve({ btcAddress: address });
@@ -89,18 +87,58 @@ module.exports = {
         when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user) {
-                if (!user.gameState && user.balance >= betValue) {
-                    user.gameState = true;
-                    user.currentGame = utils.createGamePath();
-                    user.currentStep = 0;
-                    user.betValue = betValue;
-                    user.balance = user.balance - betValue;
+                if (!user.gameState) {
+                    if (user.balance >= betValue) {
+                        user.gameState = true;
+                        user.currentGame = utils.createGamePath();
+                        user.currentStep = 0;
+                        user.betValue = betValue;
+                        user.balance = user.balance - betValue;
 
-                    user.save(function () {
-                        dfd.resolve({ betValue: betValue, nextStep: 0, balance: user.balance });
-                    });
+                        user.save(function () {
+                            dfd.resolve({ betValue: betValue, nextStep: 0, balance: user.balance });
+                        });
+                    }
+                    else {
+                        dfd.resolve( { error: 'notenoughbalance' });
+                    }
                 }
                 else { dfd.resolve( { error: 'gamestarted' }); }
+            }
+            else { dfd.resolve(false); }
+        });
+
+        return dfd.promise;
+    },
+
+    giveUserReward: function (data) {
+        var dfd = new Deferred(),
+            self = this,
+            userData = utils.getUserDataFromUrl(data.url),
+            reward;
+
+        when(this.authenticateUser(userData.userId, userData.password)).
+        then(function (user) {
+            if (user) {
+                if (user.gameState && user.currentStep > 0) {
+                    reward = utils.calculateReward(user);
+
+                    user.balance = user.balance + reward;
+                    self.resetGame(user);
+
+                    user.save(function () {
+                        if (reward > 0) {
+                            when(blockchain.transferWinningBet(user.btcAddress, reward)).
+                            then(function (response) {
+                                dfd.resolve({ balance: user.balance });
+                            });
+                        }
+                        else {
+                            dfd.resolve({ balance: user.balance });
+                        }
+                    });
+                }
+                else { dfd.resolve(false); }
             }
             else { dfd.resolve(false); }
         });
@@ -112,19 +150,19 @@ module.exports = {
         var dfd = new Deferred(),
             userData = utils.getUserDataFromUrl(data.url);
 
-            when(this.authenticateUser(userData.userId, userData.password)).
-            then(function (user) {
-                if (user) {
-                    when(blockchain.getAddressBalance(user.btcAddress)).
-                    then(function (balance) {
-                        user.balance = balance;
-                        user.save(function () {
-                            dfd.resolve({ balance: balance});
-                        });
+        when(this.authenticateUser(userData.userId, userData.password)).
+        then(function (user) {
+            if (user) {
+                when(blockchain.getAddressBalance(user.btcAddress)).
+                then(function (balance) {
+                    user.balance = balance;
+                    user.save(function () {
+                        dfd.resolve({ balance: balance});
                     });
-                }
-                else { dfd.resolve(false); }
-            });
+                });
+            }
+            else { dfd.resolve(false); }
+        });
 
         return dfd.promise;
     },
@@ -164,21 +202,35 @@ module.exports = {
     },
 
     gameOver: function (user) {
-        var dfd = new Deferred();
+        var dfd = new Deferred(),
+            self = this;
 
-        when(blockchain.transferLostBet(user.btcAddress, user.betValue)).
-        then(function (response) {
-            user.gameState = false;
-            user.betValue = 0;
-            user.currentStep = -1;
-            user.steppedOn = [];
+        this.resetGame(user);
 
+        if (user.betValue > 0) {
+            when(blockchain.transferLostBet(user.btcAddress, user.betValue)).
+            then(function (response) {
+                user.balance = user.balance - user.betValue;
+
+                user.save(function () {
+                    dfd.resolve(true);
+                });
+            });
+        }
+        else {
             user.save(function () {
                 dfd.resolve(true);
             });
-        });
+        }
 
         return dfd.promise;
+    },
+
+    resetGame: function (user) {
+        user.gameState = false;
+        user.betValue = 0;
+        user.currentStep = -1;
+        user.steppedOn = [];
     },
 
     authenticateUser: function (userId, password) {

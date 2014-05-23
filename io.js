@@ -48,6 +48,13 @@ module.exports = {
                 socket.emit('onDepositModalClickResponse', response);
             });
         });
+
+        socket.on('takeReward', function (data) {
+            when(db.giveUserReward(data)).
+            then(function (response) {
+                socket.emit('onTakeRewardClickResponse', response);
+            });
+        });
     },
 
     onDisconnect: function () {

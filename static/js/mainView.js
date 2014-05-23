@@ -18,7 +18,8 @@ define(function (require) {
             'click .available .step-tile'    : 'step',
             'click a.deposit'                : 'onDepositClick',
             'click a.withdraw'               : 'onWithdrawClick',
-            'click a.refresh'                : 'onRefreshClick'
+            'click a.refresh'                : 'onRefreshClick',
+            'click .take-reward.take-it'     : 'onTakeRewardClick'
         },
 
         initialize: function (options) {
@@ -40,6 +41,7 @@ define(function (require) {
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
             this.socket.on('refreshBalanceResponse', $.proxy(this.updateBalance, this));
             this.socket.on('onDepositModalClickResponse', $.proxy(this.showDepositModal, this));
+            this.socket.on('onTakeRewardClickResponse', $.proxy(this.onTakeRewardResponse, this));
         },
 
         onDepositClick: function (e) {
@@ -74,13 +76,20 @@ define(function (require) {
             this.refreshBalance();
         },
 
-        hasEnoughBalance: function (betValue) {
-            if (betValue > this.data.balance) {
-                return true;
+        onTakeRewardClick: function () {
+            if (this.data.gameState) {
+                this.socket.emit('takeReward', { url: this.data.url });
             }
-            else {
-                return false;
-            }
+        },
+
+        onTakeRewardResponse: function (data) {
+            $(this.$stepRows).removeClass('available');
+            $(this.$stepRows).find('.take-reward.take-it').removeClass('take-it');
+
+            this.toggleBetTypeClass();
+            this.updateBalance(data);
+
+            this.data.gameState = false;
         },
 
         updateBalance: function (data) {
@@ -99,9 +108,15 @@ define(function (require) {
         newGame: function (e) {
             var betValue = $(e.target).attr('value');
 
-            this.resetGame();
-            if (!this.data.gameState) {
-                this.socket.emit('newGame', { betValue: betValue, url: this.data.url });
+            if (this.data.balance >= betValue) {
+                this.resetGame();
+
+                if (!this.data.gameState) {
+                    this.socket.emit('newGame', { betValue: betValue, url: this.data.url });
+                }
+            }
+            else {
+                alert('Not enough balance');
             }
         },
 
@@ -114,7 +129,12 @@ define(function (require) {
                 this.updateBalance(data);
             }
             else {
-                alert('You are already playing a game');
+                if (data.error === 'notenoughbalance') {
+                    alert('Not enough balance');
+                }
+                else if (data.error === 'gamestarted') {
+                    alert('You are already playing a game');
+                }
             }
         },
 
@@ -216,6 +236,8 @@ define(function (require) {
         updateBetValue: function (betValue) {
             var $betValueNode = this.$el.find('.bet-value');
             $($betValueNode).text(betValue);
+
+            this.data.betValue = betValue;
         }
     });
 });

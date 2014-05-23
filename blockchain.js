@@ -1,5 +1,6 @@
 var BcWallet = require('blockchain-wallet'),
     Deferred = require('promised-io').Deferred,
+    when     = require('promised-io').when,
     utils    = require('./utils'),
     config   = require('./config');
 
@@ -33,11 +34,37 @@ module.exports = {
     },
 
     transferLostBet: function (address, amount) {
-        var dfd = new Deferred(),
-            mainAddress = config.mainAddress,
+        var self = this,
+            dfd = new Deferred(),
             amount = utils.btcToSatoshi(amount);
 
-        bc.payment(mainAddress, amount, { $from: address }, function (error, response) {
+        when(self._makeTransaction(address, config.mainAddress, amount)).
+        then(function (response) {
+            dfd.resolve(response);
+        });
+
+        return dfd.promise;
+    },
+
+    transferWinningBet: function (address, amount) {
+        console.log('amount: ', amount);
+
+        var self = this,
+            dfd = new Deferred(),
+            amount = utils.btcToSatoshi(amount);
+
+        when(self._makeTransaction(config.mainAddress, address, amount)).
+        then(function (response) {
+            dfd.resolve(response);
+        });
+
+        return dfd.promise;
+    },
+
+    _makeTransaction: function (from, to, amount) {
+        var dfd = new Deferred();
+
+        bc.payment(to, amount, { $from: from }, function (error, response) {
             if (!error) { dfd.resolve(response); }
             else {
                 console.log("transfer error: ", error);

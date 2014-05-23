@@ -43,6 +43,18 @@ module.exports = {
         return stepRows;
     },
 
+    calculateReward: function (user) {
+        var rewardValue;
+
+        if (user.betValue > 0) {
+            rewardValue = config.stepRows[user.currentStep - 1].rewardValue;
+
+            return (rewardValue * user.betValue) - user.betValue;
+        }
+
+        return 0;
+    },
+
     satoshiToBtc: function (satoshi) {
         return satoshi / 100000000;
     },
