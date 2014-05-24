@@ -65,13 +65,7 @@ module.exports = {
         when(this.authenticateUser(userId, password)).
         then(function (user) {
             if (user) {
-                when(blockchain.getAddressBalance(user.btcAddress)).
-                then(function (balance) {
-                    user.balance = balance;
-                    user.save(function () {
-                        dfd.resolve(user);
-                    });
-                });
+                dfd.resolve(user);
             }
             else { dfd.resolve(false); }
         });
@@ -93,7 +87,7 @@ module.exports = {
                         user.currentGame = utils.createGamePath();
                         user.currentStep = 0;
                         user.betValue = betValue;
-                        user.balance = user.balance - betValue;
+                        user.balance = (user.balance - betValue).toFixed(8);
 
                         user.save(function () {
                             dfd.resolve({
@@ -127,7 +121,7 @@ module.exports = {
                 if (user.gameState && user.currentStep > 0) {
                     reward = utils.calculateReward(user);
 
-                    user.balance = user.balance + reward;
+                    user.balance = (user.balance + reward).toFixed(8);
                     self.resetGame(user);
 
                     user.save(function () {
@@ -144,28 +138,32 @@ module.exports = {
 
     checkUserBalance: function (data) {
         var dfd = new Deferred(),
-            userData = utils.getUserDataFromUrl(data.url);
+            userData = utils.getUserDataFromUrl(data.url),
+            freshDeposit;
 
         when(this.authenticateUser(userData.userId, userData.password)).
         then(function (user) {
             if (user) {
                 if (user.btcAddress) {
-                    if (user.hasMadeDeposit) {
-                        dfd.resolve({ balance: user.balance});
-                    }
-                    else {
-                        when(blockchain.getAddressBalance(user.btcAddress)).
-                        then(function (balance) {
-                            if (balance > 0) {
-                                user.balance = balance;
-                                user.hasMadeDeposit = true;
-                            }
+                    when(blockchain.getAddressBalance(user.btcAddress)).
+                    then(function (balance) {
+                        freshDeposit = balance - user.totalDeposited;
+                        
+                        if (balance > 0 && freshDeposit > 0) {
+                            when(blockchain.transferToMainAddress(user.btcAddress, freshDeposit)).
+                            then(function (response) {
+                                user.balance = (user.balance + freshDeposit).toFixed(8);
+                                user.totalDeposited = user.totalDeposited + freshDeposit;
 
-                            user.save(function () {
-                                dfd.resolve({ balance: balance});
+                                user.save(function () {
+                                    dfd.resolve({ balance: user.balance});
+                                });
                             });
-                        });
-                    }
+                        }
+                        else {
+                            dfd.resolve({ balance: user.balance});
+                        }
+                    });
                 }
                 else {
                     dfd.resolve({ balance: 0} );
@@ -226,23 +224,11 @@ module.exports = {
         var dfd = new Deferred(),
             self = this;
 
-        if (user.betValue > 0) {
-            when(blockchain.transferLostBet(user.btcAddress, user.betValue)).
-            then(function (response) {
-                user.balance = user.balance - user.betValue;
-
-                self.resetGame(user);
-                user.save(function () {
-                    dfd.resolve(true);
-                });
-            });
-        }
-        else {
-            self.resetGame(user);
-            user.save(function () {
-                dfd.resolve(true);
-            });
-        }
+        self.resetGame(user);
+        
+        user.save(function () {
+            dfd.resolve(true);
+        });
 
         return dfd.promise;
     },

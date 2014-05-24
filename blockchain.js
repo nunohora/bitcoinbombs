@@ -33,29 +33,14 @@ module.exports = {
         return dfd.promise;
     },
 
-    transferLostBet: function (address, amount) {
+    transferToMainAddress: function (address, amount) {
         var self = this,
             dfd = new Deferred(),
-            amount = utils.btcToSatoshi(amount);
+            amountSatoshi = utils.btcToSatoshi(amount);
 
-        when(self._makeTransaction(address, config.mainAddress, amount)).
+        when(self._makeTransaction(address, config.mainAddress, amountSatoshi)).
         then(function (response) {
             console.log('lost bet: ', response);
-            dfd.resolve(response);
-        });
-
-        return dfd.promise;
-    },
-
-    transferWinningBet: function (address, amount) {
-        console.log('amount: ', amount);
-
-        var self = this,
-            dfd = new Deferred(),
-            amount = utils.btcToSatoshi(amount);
-
-        when(self._makeTransaction(config.mainAddress, address, amount)).
-        then(function (response) {
             dfd.resolve(response);
         });
 
