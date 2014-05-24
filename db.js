@@ -146,10 +146,10 @@ module.exports = {
             if (user) {
                 if (user.btcAddress) {
                     when(blockchain.getAddressBalance(user.btcAddress)).
-                    then(function (balance) {
-                        freshDeposit = balance - user.totalDeposited;
+                    then(function (response) {
+                        freshDeposit = +(response.totalReceived - user.totalDeposited).toFixed(8);
                         
-                        if (balance > 0 && freshDeposit > 0) {
+                        if (response.balance > 0 && freshDeposit > 0) {
                             when(blockchain.transferToMainAddress(user.btcAddress, freshDeposit)).
                             then(function (response) {
                                 user.balance = (user.balance + freshDeposit).toFixed(8);

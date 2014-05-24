@@ -19,13 +19,15 @@ module.exports = {
     },
 
     getAddressBalance: function (address) {
-        var dfd = new Deferred(),
-            amount;
+        var dfd = new Deferred();
 
         bc.addressBalance(address, config.bcConf, function (error, response) {
             if (!error) {
-                amount = utils.satoshiToBtc(response.balance);
-                dfd.resolve(amount);
+                console.log(response);
+                dfd.resolve({
+                    totalReceived: utils.satoshiToBtc(response.total_received),
+                    balance: utils.satoshiToBtc(response.balance)
+                });
             }
             else { dfd.resolve(null); }
         });
@@ -40,7 +42,6 @@ module.exports = {
 
         when(self._makeTransaction(address, config.mainAddress, amountSatoshi)).
         then(function (response) {
-            console.log('lost bet: ', response);
             dfd.resolve(response);
         });
 

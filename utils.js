@@ -49,7 +49,7 @@ module.exports = {
         if (user.betValue > 0) {
             rewardValue = config.stepRows[user.currentStep - 1].rewardValue;
 
-            return (rewardValue * user.betValue) - user.betValue;
+            return rewardValue * user.betValue;
         }
 
         return 0;
