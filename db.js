@@ -2,6 +2,7 @@ var mongoose      = require('mongoose'),
     connection    = mongoose.connect('mongodb://localhost/bitcoinbombs'),
     Deferred      = require('promised-io').Deferred,
     when          = require('promised-io').when,
+    seq           = require('promised-io').seq,
     utils         = require('./utils'),
     blockchain    = require('./blockchain'),
     UserModel     = require('./models/UserModel'),
@@ -38,9 +39,7 @@ module.exports = {
             fn = this[fn];
 
         when(this.authenticateUser(userData.userId, userData.password)).
-        then(function (user) {
-            if (user) { return fn(user); }
-        });
+        then(fn);
     },
 
     getUserBtcAddress: function (data) {
