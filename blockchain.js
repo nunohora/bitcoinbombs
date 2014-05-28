@@ -35,19 +35,6 @@ module.exports = {
         return dfd.promise;
     },
 
-    transferToMainAddress: function (address, amount) {
-        var self = this,
-            dfd = new Deferred(),
-            amountSatoshi = utils.btcToSatoshi(amount);
-
-        when(self._makeTransaction(address, config.mainAddress, amountSatoshi)).
-        then(function (response) {
-            dfd.resolve(response);
-        });
-
-        return dfd.promise;
-    },
-
     _makeTransaction: function (from, to, amount) {
         var dfd = new Deferred();
 

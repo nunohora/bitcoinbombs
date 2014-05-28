@@ -36,7 +36,7 @@ module.exports = {
         });
 
         socket.on('refreshBalance', function (data) {
-            when(db.checkUserBalance(data)).
+            when(db.authAndCall(data, 'checkUserBalance')).
             then(function (response) {
                 socket.emit('refreshBalanceResponse', response);
             });

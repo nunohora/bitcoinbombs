@@ -33,6 +33,16 @@ module.exports = {
         return dfd.promise;
     },
 
+    authAndCall: function (data, fn) {
+        var userData = utils.getUserDataFromUrl(data.url),
+            fn = this[fn];
+
+        when(this.authenticateUser(userData.userId, userData.password)).
+        then(function (user) {
+            if (user) { return fn(user); }
+        });
+    },
+
     getUserBtcAddress: function (data) {
         var dfd = new Deferred(),
             userData = utils.getUserDataFromUrl(data.url);
@@ -136,41 +146,31 @@ module.exports = {
         return dfd.promise;
     },
 
-    checkUserBalance: function (data) {
+    checkUserBalance: function (user) {
         var dfd = new Deferred(),
-            userData = utils.getUserDataFromUrl(data.url),
             freshDeposit;
 
-        when(this.authenticateUser(userData.userId, userData.password)).
-        then(function (user) {
-            if (user) {
-                if (user.btcAddress) {
-                    when(blockchain.getAddressBalance(user.btcAddress)).
-                    then(function (response) {
-                        freshDeposit = +(response.totalReceived - user.totalDeposited).toFixed(8);
-                        
-                        if (response.balance > 0 && freshDeposit > 0) {
-                            when(blockchain.transferToMainAddress(user.btcAddress, freshDeposit)).
-                            then(function (response) {
-                                user.balance = (user.balance + freshDeposit).toFixed(8);
-                                user.totalDeposited = user.totalDeposited + freshDeposit;
+        if (user.btcAddress) {
+            when(blockchain.getAddressBalance(user.btcAddress)).
+            then(function (response) {
+                freshDeposit = +(response.totalReceived - user.totalDeposited).toFixed(8);
 
-                                user.save(function () {
-                                    dfd.resolve({ balance: user.balance});
-                                });
-                            });
-                        }
-                        else {
-                            dfd.resolve({ balance: user.balance});
-                        }
+                if (freshDeposit > 0) {
+                    user.balance = (user.balance + freshDeposit).toFixed(8);
+                    user.totalDeposited = user.totalDeposited + freshDeposit;
+
+                    user.save(function () {
+                        dfd.resolve({ balance: user.balance});
                     });
                 }
                 else {
-                    dfd.resolve({ balance: 0} );
+                    dfd.resolve({ balance: user.balance});
                 }
-            }
-            else { dfd.resolve(false); }
-        });
+            });
+        }
+        else {
+            return dfd.resolve({ balance: 0} );
+        }
 
         return dfd.promise;
     },
@@ -225,7 +225,7 @@ module.exports = {
             self = this;
 
         self.resetGame(user);
-        
+
         user.save(function () {
             dfd.resolve(true);
         });
