@@ -22,14 +22,14 @@ module.exports = {
         console.log('Client Connected');
 
         socket.on('newGame', function (data) {
-            when(db.createNewGame(data)).
+            when(db.authAndCall(data, 'createNewGame')).
             then(function (response) {
                 socket.emit('newGameResponse', response);
             });
         });
 
         socket.on('steppedOn', function (data) {
-            when(db.checkStep(data)).
+            when(db.authAndCall(data, 'checkStep')).
             then(function (response) {
                 socket.emit('steppedOnResponse', response);
             });
@@ -43,14 +43,14 @@ module.exports = {
         });
 
         socket.on('onDepositModalClick', function (data) {
-            when(db.getUserBtcAddress(data)).
+            when(db.authAndCall(data, 'getUserBtcAddress')).
             then(function (response) {
                 socket.emit('onDepositModalClickResponse', response);
             });
         });
 
         socket.on('takeReward', function (data) {
-            when(db.giveUserReward(data)).
+            when(db.authAndCall(data, 'giveUserReward')).
             then(function (response) {
                 socket.emit('onTakeRewardClickResponse', response);
             });

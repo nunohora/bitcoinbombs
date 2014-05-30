@@ -35,7 +35,7 @@ exports.oldUser = function (req, res) {
     var urlPath,
         currentProgress;
 
-    when(db.getUser(req.params['user'], req.params['pass'])).
+    when(db.authenticateUser(req.params['user'], req.params['pass'])).
     then(function (user) {
         if (user) {
             urlPath = utils.createUrlPath({
