@@ -11,6 +11,8 @@ module.exports = {
         this.bindEvents(iosocket);
     },
 
+    noop: function () {},
+
     bindEvents: function (iosocket) {
         _.bindAll(this, 'onConnection', 'onDisconnect');
 
@@ -19,41 +21,44 @@ module.exports = {
     },
 
     onConnection: function (socket) {
+        var self = this;
+
         console.log('Client Connected');
 
         socket.on('newGame', function (data) {
-            when(db.authAndCall(data, 'createNewGame')).
-            then(function (response) {
+            when(db.authAndCall(data, 'createNewGame'), function (response) {
                 socket.emit('newGameResponse', response);
-            });
+            }, self.noop);
         });
 
         socket.on('steppedOn', function (data) {
-            when(db.authAndCall(data, 'checkStep')).
-            then(function (response) {
+            when(db.authAndCall(data, 'checkStep'), function (response) {
                 socket.emit('steppedOnResponse', response);
-            });
+            }, self.noop);
         });
 
         socket.on('refreshBalance', function (data) {
-            when(db.authAndCall(data, 'checkUserBalance')).
-            then(function (response) {
+            when(db.authAndCall(data, 'checkUserBalance'), function (response) {
                 socket.emit('refreshBalanceResponse', response);
-            });
+            }, self.noop);
         });
 
         socket.on('onDepositModalClick', function (data) {
-            when(db.authAndCall(data, 'getUserBtcAddress')).
-            then(function (response) {
+            when(db.authAndCall(data, 'getUserBtcAddress'), function (response) {
                 socket.emit('onDepositModalClickResponse', response);
-            });
+            }, self.noop);
         });
 
         socket.on('takeReward', function (data) {
-            when(db.authAndCall(data, 'giveUserReward')).
-            then(function (response) {
+            when(db.authAndCall(data, 'giveUserReward'), function (response) {
                 socket.emit('onTakeRewardClickResponse', response);
-            });
+            }, self.noop);
+        });
+
+        socket.on('withdrawBalance', function (data) {
+            when(db.authAndCall(data, 'withdrawBalance'), function (response) {
+                socket.emit('onwithdrawBalanceResponse', response);
+            }, self.noop);
         });
     },
 

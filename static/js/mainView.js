@@ -36,6 +36,10 @@ define(function (require) {
             this.bindSocketEvents();
         },
 
+        socketEmit: function (event, data) {
+            this.socket.emit(event, JSON.stringify(data));
+        },
+
         bindSocketEvents: function () {
             this.socket.on('newGameResponse', $.proxy(this.onNewGameResponse, this));
             this.socket.on('steppedOnResponse', $.proxy(this.onSteppedOnResponse, this));
@@ -46,8 +50,7 @@ define(function (require) {
 
         onDepositClick: function (e) {
             e.preventDefault();
-
-            this.socket.emit('onDepositModalClick', { url: this.data.url });
+            this.socketEmit('onDepositModalClick', { url: this.data.url });
         },
 
         showDepositModal: function (data) {
@@ -78,7 +81,7 @@ define(function (require) {
 
         onTakeRewardClick: function () {
             if (this.data.gameState) {
-                this.socket.emit('takeReward', { url: this.data.url });
+                this.socketEmit('takeReward', { url: this.data.url });
             }
         },
 
@@ -98,7 +101,7 @@ define(function (require) {
         },
 
         refreshBalance: _.debounce(function () {
-            this.socket.emit('refreshBalance', { url: this.data.url });
+            this.socketEmit('refreshBalance', { url: this.data.url });
         }, 1000),
 
         showModal: function (template) {
@@ -112,7 +115,7 @@ define(function (require) {
                 this.resetGame();
 
                 if (!this.data.gameState) {
-                    this.socket.emit('newGame', { betValue: betValue, url: this.data.url });
+                    this.socketEmit('newGame', { betValue: betValue, url: this.data.url });
                 }
             }
             else {
@@ -153,7 +156,7 @@ define(function (require) {
         step: function (e) {
             if (this.data.gameState) {
                 var stepped = $(e.target).index();
-                this.socket.emit('steppedOn', { stepped: stepped, url: this.data.url });
+                this.socketEmit('steppedOn', { stepped: stepped, url: this.data.url });
             }
         },
 

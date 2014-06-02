@@ -35,17 +35,26 @@ module.exports = {
     },
 
     authAndCall: function (data, fn) {
-        var userData = utils.getUserDataFromUrl(data.url),
+        var userData,
             dfd = new Deferred(),
             self = this,
             cb = this[fn],
             response;
 
-        when(this.authenticateUser(userData.userId, userData.password)).
-        then(function (user) {
-            if (user) { cb.apply(self, [dfd, user, data]); }
-            else { dfd.resolve(false); }
-        });
+        try {
+            data = JSON.parse(data);
+            userData = utils.getUserDataFromUrl(data.url);
+
+            when(this.authenticateUser(userData.userId, userData.password)).
+            then(function (user) {
+                if (user) { cb.apply(self, [dfd, user, data]); }
+                else { dfd.resolve(false); }
+            });
+        }
+        catch (e) {
+            console.log('error: ', e);
+            return dfd.resolve(false);
+        }
 
         return dfd.promise;
     },
@@ -89,6 +98,13 @@ module.exports = {
             }
         }
         else { dfd.resolve( { error: 'gamestarted' }); }
+    },
+
+    withdrawBalance: function (dfd, user, data) {
+        if (user.balance >= data.amount) {
+            blockchain.
+        }
+        else { dfd.resolve(false); }
     },
 
     giveUserReward: function (dfd, user) {

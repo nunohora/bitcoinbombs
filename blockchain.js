@@ -35,10 +35,10 @@ module.exports = {
         return dfd.promise;
     },
 
-    _makeTransaction: function (from, to, amount) {
+    widthdrawUserBalance: function (to, amount) {
         var dfd = new Deferred();
 
-        bc.payment(to, amount, { $from: from }, function (error, response) {
+        bc.payment(to, amount, {}, function (error, response) {
             if (!error) { dfd.resolve(response); }
             else {
                 console.log("transfer error: ", error);
@@ -48,4 +48,4 @@ module.exports = {
 
         return dfd.promise;
     }
-}
+};
