@@ -6,12 +6,14 @@ var mongoose      = require('mongoose'),
     utils         = require('./utils'),
     blockchain    = require('./blockchain'),
     UserModel     = require('./models/UserModel'),
+    JpWinnerModel = require('./models/JackpotWinnerModel'),
     db            = mongoose.connection;
 
 module.exports = {
 
     initialize: function () {
         UserModel.initialize(connection);
+        JpWinnerModel.initialize();
 
         this.model = UserModel.getUserModel();
 
@@ -101,8 +103,17 @@ module.exports = {
     },
 
     withdrawBalance: function (dfd, user, data) {
-        if (user.balance >= data.amount) {
-            blockchain.
+        if (data.amount && data.address && user.balance >= +data.amount) {
+            when(blockchain.withdrawUserBalance(data.address, +data.amount), function (response) {
+                console.log('response:', response);
+                if (response && response.message.indexOf('Sent') > 0) {
+                    user.balance = user.balance - data.amount;
+
+                    user.save(function () {
+                        dfd.resolve({ balance: user.balance });
+                    });
+                }
+            });
         }
         else { dfd.resolve(false); }
     },

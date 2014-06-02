@@ -4,7 +4,7 @@
     <input class="with-address" type="text" />
 </div>
 <div class="field">
-    <label>Amount (Current Balance: <%= balance %>):</label>
+    <label>Amount (Current Balance: <span class="modal-balance"><%= balance %></span>):</label>
     <input class="with-amount" type="text" />
 </div>
 <div class="field withdraw-btn">

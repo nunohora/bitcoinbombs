@@ -19,7 +19,8 @@ define(function (require) {
             'click a.deposit'                : 'onDepositClick',
             'click a.withdraw'               : 'onWithdrawClick',
             'click a.refresh'                : 'onRefreshClick',
-            'click .take-reward.take-it'     : 'onTakeRewardClick'
+            'click .take-reward.take-it'     : 'onTakeRewardClick',
+            'click .withdraw-btn button'     : 'onWithdrawButtonClick'
         },
 
         initialize: function (options) {
@@ -46,6 +47,7 @@ define(function (require) {
             this.socket.on('refreshBalanceResponse', $.proxy(this.updateBalance, this));
             this.socket.on('onDepositModalClickResponse', $.proxy(this.showDepositModal, this));
             this.socket.on('onTakeRewardClickResponse', $.proxy(this.onTakeRewardResponse, this));
+            this.socket.on('onwithdrawBalanceResponse', $.proxy(this.onTakeRewardResponse, this));
         },
 
         onDepositClick: function (e) {
@@ -73,6 +75,14 @@ define(function (require) {
             this.showModal(tpl);
         },
 
+        onWithdrawButtonClick: function () {
+            var $modal = $('#simplemodal-data'),
+                address = $modal.find('.with-address').val(),
+                amount = $modal.find('.with-amount').val();
+
+            this.socketEmit('withdrawBalance', { url: this.data.url, address: address, amount: amount });
+        },
+
         onRefreshClick: function (e) {
             e.preventDefault();
 
@@ -93,6 +103,16 @@ define(function (require) {
             this.updateBalance(data);
 
             this.data.gameState = false;
+        },
+
+        onwithdrawBalanceResponse: function (data) {
+            var $modal = $('#simplemodal-data'),
+                $button = $modal.find('.withdraw-btn');
+
+            $button.html('<span>Success!!</span>');
+
+            $modal.find('span.modal-balance').val(data.balance);
+            this.updateBalance(data);
         },
 
         updateBalance: function (data) {

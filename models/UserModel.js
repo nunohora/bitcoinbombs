@@ -94,4 +94,4 @@ module.exports = {
 
         this.UserModel = mongoose.model('User', UserSchema);
     }
-}
+};

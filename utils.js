@@ -60,6 +60,6 @@ module.exports = {
     },
 
     btcToSatoshi: function (btc) {
-        return btc * 100000000;
+        return Math.round(btc * 100000000);
     }
 };

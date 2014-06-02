@@ -23,7 +23,6 @@ module.exports = {
 
         bc.addressBalance(address, config.bcConf, function (error, response) {
             if (!error) {
-                console.log(response);
                 dfd.resolve({
                     totalReceived: utils.satoshiToBtc(response.total_received),
                     balance: utils.satoshiToBtc(response.balance)
@@ -35,10 +34,11 @@ module.exports = {
         return dfd.promise;
     },
 
-    widthdrawUserBalance: function (to, amount) {
-        var dfd = new Deferred();
+    withdrawUserBalance: function (to, amount) {
+        var dfd = new Deferred(),
+            satoshis = utils.btcToSatoshi(amount);
 
-        bc.payment(to, amount, {}, function (error, response) {
+        bc.payment(to, satoshis, {}, function (error, response) {
             if (!error) { dfd.resolve(response); }
             else {
                 console.log("transfer error: ", error);
