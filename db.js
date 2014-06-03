@@ -227,7 +227,12 @@ module.exports = {
 
         jackpotModel.findOne({}, function(err, entry) {
             if (!err) {
-                dfd.resolve({ jackpot: entry.accumulatedAmount });
+                if (entry) {
+                    dfd.resolve({ jackpot: entry.accumulatedAmount });
+                }
+                else {
+                    dfd.resolve({ jackpot: 0 });
+                }
             }
         });
 
