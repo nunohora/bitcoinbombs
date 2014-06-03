@@ -7,13 +7,14 @@ var mongoose      = require('mongoose'),
     blockchain    = require('./blockchain'),
     UserModel     = require('./models/UserModel'),
     JpWinnerModel = require('./models/JackpotWinnerModel'),
+    JpValueModel  = require('./models/JackpotValueModel'),
     db            = mongoose.connection;
 
 module.exports = {
-
     initialize: function () {
         UserModel.initialize(connection);
         JpWinnerModel.initialize();
+        JpValueModel.initialize();
 
         this.model = UserModel.getUserModel();
 
@@ -202,10 +203,12 @@ module.exports = {
         var dfd = new Deferred(),
             self = this;
 
-        self.resetGame(user);
+        when(this.updateJackpotValue(user.betValue), function () {
+            self.resetGame(user);
 
-        user.save(function () {
-            dfd.resolve(true);
+            user.save(function () {
+                dfd.resolve(true);
+            });
         });
 
         return dfd.promise;
@@ -216,6 +219,42 @@ module.exports = {
         user.betValue = 0;
         user.currentStep = -1;
         user.steppedOn = [];
+    },
+
+    getJackpotValue: function () {
+        var jackpotModel = JpValueModel.getModel(),
+            dfd = new Deferred();
+
+        jackpotModel.findOne({}, function(err, entry) {
+            if (!err) {
+                dfd.resolve({ jackpot: entry.accumulatedAmount });
+            }
+        });
+
+        return dfd.promise;
+    },
+
+    updateJackpotValue: function (betValue) {
+        var jackpotModel = JpValueModel.getModel(),
+            percentage = (betValue * 0.01),
+            jackpotEntry,
+            dfd = new Deferred();
+
+        //create an entry if none exists
+        jackpotModel.count({}, function (err, count) {
+            if (!count) {
+                jackpotEntry = new jackpotModel({ accumulatedAmount: 0});
+                jackpotEntry.save(function () { dfd.resolve({ jackpot: jackpotEntry.accumulatedAmount }); });
+            }
+            else {
+                jackpotModel.findOne({}, function (err, entry) {
+                    entry.accumulatedAmount = (entry.accumulatedAmount + percentage).toFixed(8);
+                    entry.save(function() { dfd.resolve({ jackpot: entry.accumulatedAmount }); });
+                });
+            }
+        });
+
+        return dfd.promise;
     },
 
     authenticateUser: function (userId, password) {

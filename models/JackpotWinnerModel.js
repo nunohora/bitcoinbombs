@@ -8,13 +8,11 @@ module.exports = {
     },
 
     getUserModel: function () {
-        return this.UserModel;
+        return this.JackpotWinnerModel;
     },
 
     createWinnerSchema: function () {
-        var WinnerSchema;
-
-        WinnerSchema = new mongoose.Schema({
+        var WinnerSchema = new mongoose.Schema({
             userId: { type: Number, required: true },
             when: { type: Date, default: Date.now },
             amount: { type: Number, default: 0 }

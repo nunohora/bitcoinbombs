@@ -55,6 +55,10 @@ module.exports = {
         return 0;
     },
 
+    hasJackpot: function () {
+        return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
+    },
+
     satoshiToBtc: function (satoshi) {
         return satoshi / 100000000;
     },
