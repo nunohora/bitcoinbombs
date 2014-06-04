@@ -56,7 +56,16 @@ module.exports = {
     },
 
     hasJackpot: function () {
+        // return true;
         return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
+    },
+
+    createJackpotTile: function (gamePath) {
+        var randomStep = Math.floor((Math.random() * 6)),
+            gameStep = gamePath[randomStep],
+            result = [];
+
+        return result;
     },
 
     satoshiToBtc: function (satoshi) {

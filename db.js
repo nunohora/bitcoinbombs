@@ -78,7 +78,8 @@ module.exports = {
     },
 
     createNewGame: function (dfd, user, data) {
-        var betValue = data.betValue;
+        var betValue = data.betValue,
+            hasJackpot;
 
         if (!user.gameState) {
             if (user.balance >= betValue) {
@@ -87,6 +88,12 @@ module.exports = {
                 user.currentStep = 0;
                 user.betValue = betValue;
                 user.balance = (user.balance - betValue).toFixed(8);
+
+                hasJackpot = utils.hasJackpot();
+
+                if (hasJackpot) {
+                    user.jackpotTile = utils.createJackpotTile(user.currentGame);
+                }
 
                 user.save(function () {
                     dfd.resolve({
@@ -120,14 +127,13 @@ module.exports = {
     },
 
     giveUserReward: function (dfd, user) {
-        var self = this,
-            reward;
+        var reward;
 
         if (user.gameState && user.currentStep > 0) {
             reward = utils.calculateReward(user);
 
             user.balance = (user.balance + reward).toFixed(8);
-            self.resetGame(user);
+            this.resetGame(user);
 
             user.save(function () {
                 dfd.resolve({ balance: user.balance });
@@ -164,7 +170,6 @@ module.exports = {
 
     checkStep: function (dfd, user, data) {
         var stepped = data.stepped,
-            self = this,
             bombStep,
             bombTile;
 
@@ -172,7 +177,7 @@ module.exports = {
             bombTile = user.currentGame[user.currentStep];
             if (stepped === bombTile) {
                 bombStep = user.currentStep;
-                when(self.gameOver(user)).
+                when(this.gameOver(user)).
                 then(function () {
                     dfd.resolve( {
                         status: 'gameOver',
