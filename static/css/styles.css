@@ -68,6 +68,10 @@ font-weight:700;
     background-position: 0px -206px;
 }
 
+.step-tile.jackpot.stepped {
+    background-position: -2px -158px;
+}
+
 .clearfix {
 zoom:1;
 }

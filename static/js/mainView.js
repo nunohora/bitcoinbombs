@@ -234,8 +234,13 @@ define(function (require) {
             this.toggleBetTypeClass();
             this.displayKaboomTile(data.stepped, data.bombStep);
             this.displayAllBombTiles(data.bombTiles);
+            this.updateJackpotValue(data.jackpot);
 
             this.data.gameState = false;
+        },
+
+        updateJackpotValue: function (value) {
+            $('.jackpot-value').val(value);
         },
 
         resetGame: function () {

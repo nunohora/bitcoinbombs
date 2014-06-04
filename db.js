@@ -179,16 +179,18 @@ module.exports = {
 
         if (user.gameState) {
             bombTile = user.currentGame[user.currentStep];
+
             if (stepped === bombTile) {
                 bombStep = user.currentStep;
                 when(this.gameOver(user)).
-                then(function () {
+                then(function (jackpot) {
                     dfd.resolve( {
                         status: 'gameOver',
                         bombTiles: user.currentGame,
                         stepped: stepped,
                         bombStep: bombStep,
-                        balance: user.balance
+                        balance: user.balance,
+                        jackpot: jackpot.jackpot
                     });
                 });
             }

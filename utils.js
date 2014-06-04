@@ -70,7 +70,7 @@ module.exports = {
             jackpotTile = Math.floor(Math.random() * 5);
         }
 
-        return [0, jackpotTile];
+        return [randomStep, jackpotTile];
     },
 
     satoshiToBtc: function (satoshi) {
