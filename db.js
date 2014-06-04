@@ -79,7 +79,8 @@ module.exports = {
 
     createNewGame: function (dfd, user, data) {
         var betValue = data.betValue,
-            hasJackpot;
+            hasJackpot,
+            jackpotTile;
 
         if (!user.gameState) {
             if (user.balance >= betValue) {
@@ -93,13 +94,15 @@ module.exports = {
 
                 if (hasJackpot) {
                     user.jackpotTile = utils.createJackpotTile(user.currentGame);
+                    user.jackpotTile[0] === 0 ? jackpotTile = user.jackpotTile[1] : null;
                 }
 
                 user.save(function () {
                     dfd.resolve({
                         betValue: betValue,
                         nextStep: 0,
-                        balance: user.balance
+                        balance: user.balance,
+                        jackpotTile: jackpotTile
                     });
                 });
             }
@@ -171,7 +174,8 @@ module.exports = {
     checkStep: function (dfd, user, data) {
         var stepped = data.stepped,
             bombStep,
-            bombTile;
+            bombTile,
+            jackpotTile;
 
         if (user.gameState) {
             bombTile = user.currentGame[user.currentStep];
@@ -191,12 +195,18 @@ module.exports = {
             else {
                 user.steppedOn.push(stepped);
                 user.currentStep = user.currentStep + 1;
+
+                if (user.jackpotTile.length) {
+                    jackpotTile = user.jackpotTile[0] === user.currentStep ? user.jackpotTile[1] : null;
+                }
+
                 user.save(function () {
                     dfd.resolve({
                         status: 'carryOn',
                         bombTile: bombTile,
                         nextStep: user.currentStep,
-                        stepped: stepped
+                        stepped: stepped,
+                        jackpotTile: jackpotTile
                     });
                 });
             }

@@ -150,6 +150,11 @@ define(function (require) {
                 this.highlightStepTiles(data.nextStep);
                 this.updateBetValue(data.betValue);
                 this.updateBalance(data);
+
+                if (data.jackpotTile) {
+                    console.log('jackpot!');
+                    this.displayJackpotTile(data.jackpotTile, data.nextStep);
+                }
             }
             else {
                 if (data.error === 'notenoughbalance') {
@@ -166,7 +171,11 @@ define(function (require) {
                 this.displaySteppedOn(data.nextStep, data.stepped);
                 this.highlightStepTiles(data.nextStep);
                 this.displayBombTile(data.bombTile, data.nextStep);
-                this.highLightCashoutTile(data.nextStep);
+                this.highlightCashoutTile(data.nextStep);
+
+                if (data.jackpotTile) {
+                    this.displayJackpotTile(data.jackpotTile, data.nextStep);
+                }
             }
             else {
                 this.gameOver(data);
@@ -192,6 +201,14 @@ define(function (require) {
                 $bombTile = $($stepRow).find('.step-tile')[bombTile];
 
             $($bombTile).addClass('bomb');
+        },
+
+
+        displayJackpotTile: function (jackpotTile, step) {
+            var $stepRow = $(this.$stepRows)[step],
+                $jackpotTile = $($stepRow).find('.step-tile')[jackpotTile];
+
+            $($jackpotTile).addClass('jackpot');
         },
 
         displayAllBombTiles: function (bombTiles) {
@@ -225,6 +242,7 @@ define(function (require) {
             $(this.$stepRows).find('.bomb').removeClass('bomb');
             $(this.$stepRows).find('.kaboom').removeClass('kaboom');
             $(this.$stepRows).find('.stepped').removeClass('stepped');
+            $(this.$stepRows).find('.jackpot').removeClass('jackpot');
         },
 
         displayKaboomTile: function(stepped, bombStep) {
@@ -238,7 +256,7 @@ define(function (require) {
             $(this.$betTypeNode).toggleClass('available');
         },
 
-        highLightCashoutTile: function (step) {
+        highlightCashoutTile: function (step) {
             var $reward = this.$el.find('.take-reward.take-it'),
                 $stepRow = this.$el.find('.step-row')[step - 1];
 

@@ -27,6 +27,7 @@ module.exports = {
             gameState: { type: Boolean, required: true, default: 0 },
             betValue: { type: Number, required: true, default: 0 },
             balance: { type: Number, required: true, default: 0},
+            jackpotTile: Array,
             currentGame: Array,
             steppedOn: Array
         });

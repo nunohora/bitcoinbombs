@@ -56,16 +56,21 @@ module.exports = {
     },
 
     hasJackpot: function () {
-        // return true;
-        return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
+        return true;
+        // return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
     },
 
     createJackpotTile: function (gamePath) {
-        var randomStep = Math.floor((Math.random() * 6)),
-            gameStep = gamePath[randomStep],
-            result = [];
+        var randomStep = Math.floor((Math.random() * 9)),
+            bombTile = gamePath[randomStep],
+            jackpotTile = bombTile;
 
-        return result;
+        //get a random tile that isnt the bomb tile
+        while (jackpotTile == bombTile) {
+            jackpotTile = Math.floor(Math.random() * 5);
+        }
+
+        return [0, jackpotTile];
     },
 
     satoshiToBtc: function (satoshi) {

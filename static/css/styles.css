@@ -28,7 +28,7 @@ cursor:pointer;
 
 .bet-type li,
 .bet-type.available li:hover {
-background:#666;
+    background:#666;
 }
 
 .bet-type li:nth-child(3),.bet-type li:nth-child(6),.bet-type li:nth-child(9),.bet-type li:nth-child(12) {
@@ -47,7 +47,8 @@ font-weight:700;
 
 .step-tile.bomb,
 .step-tile.stepped,
-.step-title.kaboom {
+.step-tile.kaboom,
+.step-tile.jackpot {
     -webkit-transition-duration: 0;
 }
 
@@ -62,6 +63,11 @@ font-weight:700;
 .step-tile.kaboom {
     background-position: 3px -273px;
 }
+
+.step-tile.jackpot {
+    background-position: 0px -206px;
+}
+
 .clearfix {
 zoom:1;
 }
@@ -113,7 +119,7 @@ height:109px;
 margin:10px 0;
 }
 
-.logo,.bomb,.stepped,.treasure,.refresh,.kaboom {
+.logo,.bomb,.stepped,.treasure,.refresh,.kaboom,.jackpot {
 background: url(../images/sprites.png) no-repeat;
 }
 
@@ -171,7 +177,7 @@ width:40px;
 }
 
 .step-row.available .step-tile:hover {
-    background:#f3610b;
+    background-color:#f3610b;
 }
 
 .take-reward {
@@ -387,7 +393,7 @@ padding:0;
     background-image: -webkit-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
     background-image: -moz-linear-gradient(top,rgba(0,0,0,.05) 0,rgba(0,0,0,.1));
     background-image: -o-linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
-    background-image: linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));    
+    background-image: linear-gradient(transparent,rgba(0,0,0,.05) 40%,rgba(0,0,0,.1));
 }
 
 .simplemodal-data button:active {

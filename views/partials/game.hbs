@@ -17,7 +17,7 @@
     </div>
     <ul class="game-steps">
         {{#each privateData.currentProgress}}
-            <li class="step-row {{../privateData.currentStep}} {{#ifCond @index ../privateData.currentStep}}available{{/ifCond}}">
+            <li class="step-row {{#ifCond @index ../privateData.currentStep}}available{{/ifCond}}">
                 <ul>
                     <li class="step-tile {{#ifCond this.bomb 0}}bomb{{/ifCond}}{{#ifCond this.step 0}}stepped{{/ifCond}}"></li>
                     <li class="step-tile {{#ifCond this.bomb 1}}bomb{{/ifCond}}{{#ifCond this.step 1}}stepped{{/ifCond}}"></li>
