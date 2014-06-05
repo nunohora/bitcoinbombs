@@ -173,24 +173,24 @@ module.exports = {
 
     checkStep: function (dfd, user, data) {
         var stepped = data.stepped,
+            newJackpotValue = null,
             bombStep,
             bombTile,
-            jackpotTile;
+            jackpotTile,
+            response;
 
         if (user.gameState) {
             bombTile = user.currentGame[user.currentStep];
 
             if (stepped === bombTile) {
                 bombStep = user.currentStep;
-                when(this.gameOver(user)).
-                then(function (jackpot) {
-                    console.log('jackpot: ', jackpot);
+
+                when(this.gameOver(user), function (jackpot) {
                     dfd.resolve( {
                         status: 'gameOver',
                         bombTiles: user.currentGame,
                         stepped: stepped,
                         bombStep: bombStep,
-                        balance: user.balance,
                         jackpot: jackpot.jackpot
                     });
                 });
@@ -199,19 +199,36 @@ module.exports = {
                 user.steppedOn.push(stepped);
                 user.currentStep = user.currentStep + 1;
 
+                //checking if a jackpot tile is available for the next step
                 if (user.jackpotTile.length) {
                     jackpotTile = user.jackpotTile[0] === user.currentStep ? user.jackpotTile[1] : null;
                 }
 
-                user.save(function () {
-                    dfd.resolve({
-                        status: 'carryOn',
-                        bombTile: bombTile,
-                        nextStep: user.currentStep,
-                        stepped: stepped,
-                        jackpotTile: jackpotTile
+                response = {
+                    status: 'carryOn',
+                    bombTile: bombTile,
+                    nextStep: user.currentStep,
+                    stepped: stepped
+                }
+
+                //checking if the user stepped on a jackpot tile
+                if (jackpotTile === stepped && user.betValue > 0) {
+                    when(this.registerJackpotWinner(user), function (wonJackpotValue) {
+                        response.jackpotTile = null;
+                        response.jackpot = 0;
+
+                        console.log('won jackpot value: ', wonJackpotValue);
+                        //updating user balance
+                        user.balance = (user.balance + wonJackpotValue.jackpot).toFixed(8);
+                        response.balance = user.balance;
+
+                        user.save(function () { dfd.resolve(response); });
                     });
-                });
+                }
+                else {
+                    response.jackpotTile = jackpotTile;
+                    user.save(function () { dfd.resolve(response); });
+                }
             }
         }
         else { dfd.resolve(false); }
@@ -275,6 +292,30 @@ module.exports = {
                     entry.save(function() { dfd.resolve({ jackpot: entry.accumulatedAmount }); });
                 });
             }
+        });
+
+        return dfd.promise;
+    },
+
+    registerJackpotWinner: function (user) {
+        var dfd = new Deferred(),
+            jackpotWinnerModel = JpWinnerModel.getModel(),
+            jackpotWinner,
+            self = this;
+
+        when(this.getJackpotValue(), function (jackpotValue) {
+            when(self.updateJackpotValue(0), function () {
+
+                jackpotWinner = new jackpotWinnerModel({
+                    userId: user.userId,
+                    when: Date.now(),
+                    amount: jackpotValue
+                });
+
+                jackpotWinner.save(function () {
+                    dfd.resolve(jackpotValue);
+                })
+            });
         });
 
         return dfd.promise;

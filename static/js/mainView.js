@@ -175,6 +175,12 @@ define(function (require) {
                 if (data.jackpotTile !== null) {
                     this.displayJackpotTile(data.jackpotTile, data.nextStep);
                 }
+
+                if (data.balance) {
+                    console.log('won jackpot: ', data);
+                    this.updateBalance(data);
+                    this.updateJackpotValue(data.jackpot);
+                }
             }
             else {
                 this.gameOver(data);
@@ -238,7 +244,7 @@ define(function (require) {
         },
 
         updateJackpotValue: function (value) {
-            console.log('jackpot value: ', value);
+            console.log('value: ', value);
             $('.jackpot-value').val(value);
         },
 

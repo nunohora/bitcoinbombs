@@ -7,7 +7,7 @@ module.exports = {
         this.createWinnerSchema();
     },
 
-    getUserModel: function () {
+    getModel: function () {
         return this.JackpotWinnerModel;
     },
 
@@ -18,6 +18,6 @@ module.exports = {
             amount: { type: Number, default: 0 }
         });
 
-        this.WinnerSchema = mongoose.model('JackpotWinner', WinnerSchema);
+        this.JackpotWinnerModel = mongoose.model('JackpotWinner', WinnerSchema);
     }
 };
