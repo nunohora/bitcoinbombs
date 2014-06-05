@@ -10,9 +10,9 @@ exports.newUser = function(req, res){
         jackpot;
 
     all(db.createNewUser(),
-        db.getJackpotValue()
-        // db.getLatestJackpotWinners(),
-        // db.getBiggestJackpotWinners()
+        db.getJackpotValue(),
+        db.getLatestJackpotWinners(),
+        db.getBiggestJackpotWinners()
         ).
     then(function (params) {
         user = params[0];

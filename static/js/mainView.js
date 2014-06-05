@@ -47,7 +47,7 @@ define(function (require) {
             this.socket.on('refreshBalanceResponse', $.proxy(this.updateBalance, this));
             this.socket.on('onDepositModalClickResponse', $.proxy(this.showDepositModal, this));
             this.socket.on('onTakeRewardClickResponse', $.proxy(this.onTakeRewardResponse, this));
-            this.socket.on('onwithdrawBalanceResponse', $.proxy(this.onTakeRewardResponse, this));
+            this.socket.on('onwithdrawBalanceResponse', $.proxy(this.onwithdrawBalanceResponse, this));
         },
 
         onDepositClick: function (e) {
@@ -111,7 +111,7 @@ define(function (require) {
 
             $button.html('<span>Success!!</span>');
 
-            $modal.find('span.modal-balance').val(data.balance);
+            $modal.find('span.modal-balance').text(data.balance);
             this.updateBalance(data);
         },
 

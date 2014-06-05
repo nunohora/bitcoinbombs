@@ -56,8 +56,7 @@ module.exports = {
     },
 
     hasJackpot: function () {
-        return true;
-        // return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
+        return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
     },
 
     createJackpotTile: function (gamePath) {

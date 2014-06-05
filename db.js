@@ -116,8 +116,8 @@ module.exports = {
     withdrawBalance: function (dfd, user, data) {
         if (data.amount && data.address && user.balance >= +data.amount) {
             when(blockchain.withdrawUserBalance(data.address, +data.amount), function (response) {
-                console.log('response:', response);
                 if (response && response['tx_hash']) {
+                    console.log('balance success');
                     user.balance = user.balance - data.amount;
 
                     user.save(function () {
@@ -182,6 +182,7 @@ module.exports = {
         if (user.gameState) {
             bombTile = user.currentGame[user.currentStep];
 
+            //game over
             if (stepped === bombTile) {
                 bombStep = user.currentStep;
 
@@ -209,15 +210,16 @@ module.exports = {
                     bombTile: bombTile,
                     nextStep: user.currentStep,
                     stepped: stepped
-                }
+                };
 
                 //checking if the user stepped on a jackpot tile
-                if (jackpotTile === stepped && user.betValue > 0) {
+                if (user.jackpotTile[1] === stepped &&
+                    user.betValue > 0 &&
+                    user.jackpotTile[0] === user.currentStep - 1) {
                     when(this.registerJackpotWinner(user), function (wonJackpotValue) {
                         response.jackpotTile = null;
                         response.jackpot = 0;
 
-                        console.log('won jackpot value: ', wonJackpotValue);
                         //updating user balance
                         user.balance = (user.balance + wonJackpotValue.jackpot).toFixed(8);
                         response.balance = user.balance;
@@ -310,9 +312,9 @@ module.exports = {
             self = this;
 
         when(this.getJackpotValue(), function (jackpotValue) {
-            console.log('HERE!!!!!');
-
             when(self.updateJackpotValue(true, 0), function () {
+                console.log('jackpot value: ', jackpotValue);
+                
                 jackpotWinner = new jackpotWinnerModel({
                     userId: user.userId,
                     when: Date.now(),
@@ -321,8 +323,30 @@ module.exports = {
 
                 jackpotWinner.save(function () {
                     dfd.resolve(jackpotValue);
-                })
+                });
             });
+        });
+
+        return dfd.promise;
+    },
+
+    getLatestJackpotWinners: function () {
+        var dfd = new Deferred(),
+            winnerModel = JpWinnerModel.getModel();
+
+        winnerModel.find({}).sort({'when': 'desc'}).limit(5).exec(function (err, entries) {
+            dfd.resolve(entries);
+        });
+
+        return dfd.promise;
+    },
+
+    getBiggestJackpotWinners: function () {
+        var dfd = new Deferred(),
+        winnerModel = JpWinnerModel.getModel();
+
+        winnerModel.find({}).sort({'amount': 'desc'}).limit(5).exec(function (err, entries) {
+            dfd.resolve(entries);
         });
 
         return dfd.promise;
