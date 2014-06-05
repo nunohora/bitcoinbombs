@@ -244,8 +244,7 @@ define(function (require) {
         },
 
         updateJackpotValue: function (value) {
-            console.log('value: ', value);
-            $('.jackpot-value').val(value);
+            $('.jackpot-value').text(value);
         },
 
         resetGame: function () {

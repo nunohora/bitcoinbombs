@@ -117,7 +117,7 @@ module.exports = {
         if (data.amount && data.address && user.balance >= +data.amount) {
             when(blockchain.withdrawUserBalance(data.address, +data.amount), function (response) {
                 console.log('response:', response);
-                if (response && response.message.indexOf('Sent') > 0) {
+                if (response && response['tx_hash']) {
                     user.balance = user.balance - data.amount;
 
                     user.save(function () {
@@ -238,7 +238,7 @@ module.exports = {
         var dfd = new Deferred(),
             self = this;
 
-        when(this.updateJackpotValue(user.betValue), function (jackpot) {
+        when(this.updateJackpotValue(false, user.betValue), function (jackpot) {
             self.resetGame(user);
 
             user.save(function () {
@@ -274,7 +274,7 @@ module.exports = {
         return dfd.promise;
     },
 
-    updateJackpotValue: function (betValue) {
+    updateJackpotValue: function (hasWon, betValue) {
         var jackpotModel = JpValueModel.getModel(),
             percentage = (betValue * 0.01),
             jackpotEntry,
@@ -288,7 +288,13 @@ module.exports = {
             }
             else {
                 jackpotModel.findOne({}, function (err, entry) {
-                    entry.accumulatedAmount = (entry.accumulatedAmount + percentage).toFixed(8);
+                    if (hasWon) {
+                        entry.accumulatedAmount = 0;
+                    }
+                    else {
+                        entry.accumulatedAmount = (entry.accumulatedAmount + percentage).toFixed(8);
+                    }
+
                     entry.save(function() { dfd.resolve({ jackpot: entry.accumulatedAmount }); });
                 });
             }
@@ -304,8 +310,9 @@ module.exports = {
             self = this;
 
         when(this.getJackpotValue(), function (jackpotValue) {
-            when(self.updateJackpotValue(0), function () {
+            console.log('HERE!!!!!');
 
+            when(self.updateJackpotValue(true, 0), function () {
                 jackpotWinner = new jackpotWinnerModel({
                     userId: user.userId,
                     when: Date.now(),
