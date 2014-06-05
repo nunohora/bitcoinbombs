@@ -70,6 +70,8 @@ module.exports = {
             jackpotTile = Math.floor(Math.random() * 5);
         }
 
+        console.log([randomStep, jackpotTile]);
+        
         return [randomStep, jackpotTile];
     },
 

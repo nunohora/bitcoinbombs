@@ -151,8 +151,7 @@ define(function (require) {
                 this.updateBetValue(data.betValue);
                 this.updateBalance(data);
 
-                if (data.jackpotTile) {
-                    console.log('jackpot!');
+                if (data.jackpotTile !== null) {
                     this.displayJackpotTile(data.jackpotTile, data.nextStep);
                 }
             }
@@ -173,7 +172,7 @@ define(function (require) {
                 this.displayBombTile(data.bombTile, data.nextStep);
                 this.highlightCashoutTile(data.nextStep);
 
-                if (data.jackpotTile) {
+                if (data.jackpotTile !== null) {
                     this.displayJackpotTile(data.jackpotTile, data.nextStep);
                 }
             }
@@ -202,7 +201,6 @@ define(function (require) {
 
             $($bombTile).addClass('bomb');
         },
-
 
         displayJackpotTile: function (jackpotTile, step) {
             var $stepRow = $(this.$stepRows)[step],
@@ -240,6 +238,7 @@ define(function (require) {
         },
 
         updateJackpotValue: function (value) {
+            console.log('jackpot value: ', value);
             $('.jackpot-value').val(value);
         },
 

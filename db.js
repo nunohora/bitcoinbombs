@@ -94,7 +94,7 @@ module.exports = {
 
                 if (hasJackpot) {
                     user.jackpotTile = utils.createJackpotTile(user.currentGame);
-                    user.jackpotTile[0] === 0 ? jackpotTile = user.jackpotTile[1] : null;
+                    jackpotTile = user.jackpotTile[0] === 0 ? user.jackpotTile[1] : null;
                 }
 
                 user.save(function () {
@@ -184,6 +184,7 @@ module.exports = {
                 bombStep = user.currentStep;
                 when(this.gameOver(user)).
                 then(function (jackpot) {
+                    console.log('jackpot: ', jackpot);
                     dfd.resolve( {
                         status: 'gameOver',
                         bombTiles: user.currentGame,
@@ -220,11 +221,11 @@ module.exports = {
         var dfd = new Deferred(),
             self = this;
 
-        when(this.updateJackpotValue(user.betValue), function () {
+        when(this.updateJackpotValue(user.betValue), function (jackpot) {
             self.resetGame(user);
 
             user.save(function () {
-                dfd.resolve(true);
+                dfd.resolve(jackpot);
             });
         });
 
