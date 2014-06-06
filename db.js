@@ -2,7 +2,6 @@ var mongoose      = require('mongoose'),
     connection    = mongoose.connect('mongodb://localhost/bitcoinbombs'),
     Deferred      = require('promised-io').Deferred,
     when          = require('promised-io').when,
-    seq           = require('promised-io').seq,
     utils         = require('./utils'),
     blockchain    = require('./blockchain'),
     UserModel     = require('./models/UserModel'),
@@ -256,6 +255,7 @@ module.exports = {
         user.betValue = 0;
         user.currentStep = -1;
         user.steppedOn = [];
+        user.jackpotTile = [];
     },
 
     getJackpotValue: function () {
@@ -313,15 +313,13 @@ module.exports = {
 
         when(this.getJackpotValue(), function (jackpotValue) {
             when(self.updateJackpotValue(true, 0), function () {
-                console.log('jackpot value: ', jackpotValue);
-                
                 jackpotWinner = new jackpotWinnerModel({
                     userId: user.userId,
                     when: Date.now(),
-                    amount: jackpotValue
+                    amount: jackpotValue.jackpot
                 });
 
-                jackpotWinner.save(function () {
+                jackpotWinner.save(function (err, bla) {
                     dfd.resolve(jackpotValue);
                 });
             });

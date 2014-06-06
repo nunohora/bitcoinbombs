@@ -1,12 +1,6 @@
-<footer id="footer">    
+<footer id="footer">
     <div>
-{{!--         <div class="game-data">
-            <span>Sha256(Game data):</span><span class="hash">No game started yet.</span>
-        </div>
-        <div class="game-data">
-            <span>Game data:</span><span class="hash">Will be shown after the game has finished.</span>
-        </div>
- --}}        <h2>Latest Jackpot Winners</h2>
+        <h2>Latest Jackpot Winners</h2>
         <table>
             <tbody>
                 <tr>
@@ -14,11 +8,13 @@
                     <th>When</th>
                     <th>What</th>
                 </tr>
-                <tr><td>User 74719</td><td>2014-04-16 07:07:10</td><td>0.00299650 XBT</td></tr>
-                <tr><td>User 83625</td><td>2014-04-14 19:40:11</td><td>0.00036000 XBT</td></tr>
-                <tr><td>User 83625</td><td>2014-04-14 19:37:14</td><td>0.00403850 XBT</td></tr>
-                <tr><td>User 74719</td><td>2014-04-14 03:45:32</td><td>0.00515700 XBT</td></tr>
-                <tr><td>User 74719</td><td>2014-04-13 19:52:23</td><td>0.01540750 XBT</td></tr>
+                {{#each privateData.latestWinners}}
+                    <tr>
+                        <td>User {{this.userId}}</td>
+                        <td>{{formatDate this.when 'YYYY-MM-DD HH:mm:ss'}}</td>
+                        <td>{{this.amount}} XBT</td>
+                    </tr>
+                {{/each}}
             </tbody>
         </table>
         <h2>Biggest Jackpot Wins</h2>
@@ -29,14 +25,16 @@
                     <th>When</th>
                     <th>What</th>
                 </tr>
-                <tr><td>User 6819</td><td>2013-09-23 04:19:50</td><td>0.53810500 XBT</td></tr>
-                <tr><td>User 8603</td><td>2013-10-16 19:53:20</td><td>0.49950500 XBT</td></tr>
-                <tr><td>User 28144</td><td>2013-12-15 03:33:57</td><td>0.19108850 XBT</td></tr>
-                <tr><td>User 1078</td><td>2013-07-26 13:37:39</td><td>0.19045500 XBT</td></tr>
-                <tr><td>User 28123</td><td>2014-01-03 22:58:07</td><td>0.15556100 XBT</td></tr>
+                {{#each privateData.biggestWinners}}
+                    <tr>
+                        <td>User {{this.userId}}</td>
+                        <td>{{formatDate this.when 'YYYY-MM-DD HH:mm:ss'}}</td>
+                        <td>{{this.amount}} XBT</td>
+                    </tr>
+                {{/each}}
             </tbody>
-        </table>      
-         <h2>Other sites you might also enjoy</h2>
-         <a href="http://litecoinkamikaze.com/ref/89771"></a>
-</div>
+        </table>
+        <h2>Other sites you might also enjoy</h2>
+        <a href="http://litecoinkamikaze.com/ref/89771"></a>
+    </div>
 </footer>

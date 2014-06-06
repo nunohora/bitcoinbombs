@@ -13,7 +13,7 @@ exports.newUser = function(req, res){
         db.getJackpotValue(),
         db.getLatestJackpotWinners(),
         db.getBiggestJackpotWinners()
-        ).
+    ).
     then(function (params) {
         user = params[0];
         jackpot = params[1];
@@ -36,7 +36,9 @@ exports.newUser = function(req, res){
                 betValue: 0,
                 currentProgress: config.stepRows,
                 stepTiles: config.stepTiles,
-                jackpot: jackpot.jackpot
+                jackpot: jackpot.jackpot,
+                latestWinners: params[2],
+                biggestWinners: params[3]
             }
         });
     });
@@ -49,8 +51,10 @@ exports.oldUser = function (req, res) {
         jackpot;
 
     all(db.authenticateUser(req.params['user'], req.params['pass']),
-        db.getJackpotValue()
-        ).
+        db.getJackpotValue(),
+        db.getLatestJackpotWinners(),
+        db.getBiggestJackpotWinners()
+    ).
     then(function (params) {
         user = params[0];
         jackpot = params[1];
@@ -76,7 +80,9 @@ exports.oldUser = function (req, res) {
                     takeRewardIndex: user.currentStep - 1,
                     betValue: user.betValue,
                     currentProgress: currentProgress,
-                    stepTiles: config.stepTiles
+                    stepTiles: config.stepTiles,
+                    latestWinners: params[2],
+                    biggestWinners: params[3]
                 }
             });
         }

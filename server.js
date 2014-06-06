@@ -1,5 +1,6 @@
 //setup Dependencies
 var connect = require('connect'),
+    moment  = require('moment'),
     hbs     = require('hbs'),
     express = require('express'),
     io      = require('./io'),
@@ -38,11 +39,8 @@ hbs.registerHelper('ifCond', function(v1, v2, options) {
   return options.inverse(this);
 });
 
-hbs.registerHelper('times', function(n, options) {
-    var accum = '';
-    for(var i = 0; i < n; ++i)
-        accum += options.fn(i);
-    return accum;
+hbs.registerHelper("formatDate", function(datetime, format) {
+    return moment(datetime).format(format);
 });
 
 //setup the errors

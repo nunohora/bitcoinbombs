@@ -1,7 +1,7 @@
 {
-  "name": "Bitcoin-Bombs",
-  "description": "Bitcoin Kamikaze Clone",
-  "author": "Nuno Hora <your@emailaddress.com>",
+  "name": "Bitcoin Kamikaze",
+  "description": "Bitcoin Kamikaze",
+  "author": "Nuno Hora <nunohora@gmail.com>",
   "version": "0.0.1",
   "dependencies": {
     "connect": "1.8.5",
@@ -15,7 +15,8 @@
     "password-generator": "0.2.2",
     "bcrypt": "0.7.7",
     "mongoose-auto-increment": "3.0.2",
-    "cron": "1.0.4"
+    "cron": "1.0.4",
+    "moment": "2.6.0"
   },
   "devDependencies": {
     "vows": "0.5.x",

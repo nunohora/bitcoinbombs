@@ -13,9 +13,9 @@ module.exports = {
 
     createWinnerSchema: function () {
         var WinnerSchema = new mongoose.Schema({
-            userId: { type: Number, required: true },
-            when: { type: Date, default: Date.now },
-            amount: { type: Number, default: 0 }
+            userId: Number,
+            when: Date,
+            amount: Number
         });
 
         this.JackpotWinnerModel = mongoose.model('JackpotWinner', WinnerSchema);

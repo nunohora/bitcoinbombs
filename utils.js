@@ -56,7 +56,7 @@ module.exports = {
     },
 
     hasJackpot: function () {
-        return Math.floor((Math.random() * config.jackpotChance) + 1) === 0;
+        return Math.floor((Math.random() * config.jackpotChance)) === 0;
     },
 
     createJackpotTile: function (gamePath) {
@@ -69,8 +69,6 @@ module.exports = {
             jackpotTile = Math.floor(Math.random() * 5);
         }
 
-        console.log([randomStep, jackpotTile]);
-        
         return [randomStep, jackpotTile];
     },
 
