@@ -40,6 +40,13 @@ module.exports = {
             stepRows[i].bomb = user.currentGame[i];
         }
 
+        //has to be a different loop for jackpot
+        //since we will display even of the next available
+        //step
+        for (var i = 0; i <= user.currentStep; i++) {
+            stepRows[i].jackpot = user.jackpotTile[0] === i ? user.jackpotTile[1] : null;
+        }
+
         return stepRows;
     },
 

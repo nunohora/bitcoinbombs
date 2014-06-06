@@ -19,11 +19,32 @@
         {{#each privateData.currentProgress}}
             <li class="step-row {{#ifCond @index ../privateData.currentStep}}available{{/ifCond}}">
                 <ul>
-                    <li class="step-tile {{#ifCond this.bomb 0}}bomb{{/ifCond}}{{#ifCond this.step 0}}stepped{{/ifCond}}"></li>
-                    <li class="step-tile {{#ifCond this.bomb 1}}bomb{{/ifCond}}{{#ifCond this.step 1}}stepped{{/ifCond}}"></li>
-                    <li class="step-tile {{#ifCond this.bomb 2}}bomb{{/ifCond}}{{#ifCond this.step 2}}stepped{{/ifCond}}"></li>
-                    <li class="step-tile {{#ifCond this.bomb 3}}bomb{{/ifCond}}{{#ifCond this.step 3}}stepped{{/ifCond}}"></li>
-                    <li class="step-tile {{#ifCond this.bomb 4}}bomb{{/ifCond}}{{#ifCond this.step 4}}stepped{{/ifCond}}"></li>
+                    <li class="step-tile
+                        {{#ifCond this.bomb 0}}bomb{{/ifCond}}
+                        {{#ifCond this.step 0}}stepped{{/ifCond}}
+                        {{#ifCond this.jackpot 0}}jackpot{{/ifCond}}
+                        ">
+                    </li>
+                    <li class="step-tile
+                        {{#ifCond this.bomb 1}}bomb{{/ifCond}}
+                        {{#ifCond this.step 1}}stepped{{/ifCond}}
+                        {{#ifCond this.jackpot 1}}jackpot{{/ifCond}}">
+                    </li>
+                    <li class="step-tile
+                        {{#ifCond this.bomb 2}}bomb{{/ifCond}}
+                        {{#ifCond this.step 2}}stepped{{/ifCond}}
+                        {{#ifCond this.jackpot 2}}jackpot{{/ifCond}}">
+                    </li>
+                    <li class="step-tile
+                        {{#ifCond this.bomb 3}}bomb{{/ifCond}}
+                        {{#ifCond this.step 3}}stepped{{/ifCond}}
+                        {{#ifCond this.jackpot 3}}jackpot{{/ifCond}}">
+                    </li>
+                    <li class="step-tile
+                        {{#ifCond this.bomb 4}}bomb{{/ifCond}}
+                        {{#ifCond this.step 4}}stepped{{/ifCond}}
+                        {{#ifCond this.jackpot 4}}jackpot{{/ifCond}}">
+                    </li>
                     <li class="take-reward tile {{#ifCond @index ../privateData.takeRewardIndex}}take-it{{/ifCond}}">Take bet * {{this.rewardValue}}</li>
                 </ul>
             </li>
