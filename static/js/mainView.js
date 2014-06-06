@@ -109,10 +109,12 @@ define(function (require) {
             var $modal = $('#simplemodal-data'),
                 $button = $modal.find('.withdraw-btn');
 
-            $button.html('<span>Success!!</span>');
+            if (data) {
+                $button.html('<span>Success!!</span>');
 
-            $modal.find('span.modal-balance').text(data.balance);
-            this.updateBalance(data);
+                $modal.find('span.modal-balance').text(data.balance);
+                this.updateBalance(data);
+            }
         },
 
         updateBalance: function (data) {

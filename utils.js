@@ -38,13 +38,8 @@ module.exports = {
         for (var i = 0; i < user.currentStep; i++) {
             stepRows[i].step = user.steppedOn[i];
             stepRows[i].bomb = user.currentGame[i];
-        }
-
-        //has to be a different loop for jackpot
-        //since we will display even of the next available
-        //step
-        for (var i = 0; i <= user.currentStep; i++) {
-            stepRows[i].jackpot = user.jackpotTile[0] === i ? user.jackpotTile[1] : null;
+            //jackpot tile
+            stepRows[i + 1].jackpot = user.jackpotTile[0] === i + 1 ? user.jackpotTile[1] : null;
         }
 
         return stepRows;

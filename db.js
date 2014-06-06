@@ -3,6 +3,7 @@ var mongoose      = require('mongoose'),
     Deferred      = require('promised-io').Deferred,
     when          = require('promised-io').when,
     utils         = require('./utils'),
+    config        = require('./config'),
     blockchain    = require('./blockchain'),
     UserModel     = require('./models/UserModel'),
     JpWinnerModel = require('./models/JackpotWinnerModel'),
@@ -77,12 +78,12 @@ module.exports = {
     },
 
     createNewGame: function (dfd, user, data) {
-        var betValue = data.betValue,
+        var betValue = +data.betValue,
             hasJackpot,
             jackpotTile;
 
         if (!user.gameState) {
-            if (user.balance >= betValue) {
+            if (user.balance >= betValue && config.possibleBetValues.indexOf(betValue) > -1) {
                 user.gameState = true;
                 user.currentGame = utils.createGamePath();
                 user.currentStep = 0;
@@ -116,7 +117,6 @@ module.exports = {
         if (data.amount && data.address && user.balance >= +data.amount) {
             when(blockchain.withdrawUserBalance(data.address, +data.amount), function (response) {
                 if (response && response['tx_hash']) {
-                    console.log('balance success');
                     user.balance = user.balance - data.amount;
 
                     user.save(function () {
