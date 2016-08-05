@@ -1,11 +1,11 @@
 module.exports = {
-    bcGuid: '***REMOVED***',
+    bcGuid: '*** REMOVED ***',
 
-    bcPass: '***REMOVED***',
+    bcPass: '*** REMOVED ***',
 
     bcConf: 1,
 
-    mainAddress: '***REMOVED***',
+    mainAddress: '*** REMOVED ***',
 
     'stepRows': [
         { 'rewardValue': 1.2, bomb: null, step: null, jackpot: null },
